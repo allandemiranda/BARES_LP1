@@ -80,7 +80,10 @@ int main()
         if ( result.type != Parser::ResultType::OK )
             print_error_msg( result, expr );
         else
+        {
             std::cout << ">>> Expression SUCCESSFULLY parsed!\n";
+            /// parte de Allan
+        }
 
          // Recuperar a lista de tokens.
         auto lista = my_parser.get_tokens();

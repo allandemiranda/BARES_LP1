@@ -251,6 +251,7 @@ bool Parser::term()
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( m_it_curr_symb );
     // Vamos tokenizar o inteiro, se ele for bem formado.
+    if( minus == '+')
     if ( integer() )
     {
         // Copiar a substring correspondente para uma variável string.
@@ -285,6 +286,8 @@ bool Parser::term()
         // Create the corresponding error.
         m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
     }
+    // else
+    //     next_symbol();
     return m_result.type == ResultType::OK;
 }
 
@@ -307,21 +310,32 @@ bool Parser::integer()
     // minus = skip_u_minus();
     // skip_ws();
     // Vamos tentar aceitar o '-'.
-    if( minus == '-' )
-    {
-        // m_it_curr_symb-=1;
-        // m_it_curr_symb = '-';
-        accept( terminal_symbol_t::TS_MINUS );
-        return natural_number();
-        //return *m_it_curr_symb  0;
-    }
+    // if( minus == '-' )
+    // {
+    //     // m_it_curr_symb-=1;
+    //     // m_it_curr_symb = '-';
+    //     // next_symbol();
+    //     accept( terminal_symbol_t::TS_MINUS );
+    //     return natural_number();
+    //     //return *m_it_curr_symb  0;
+    // }
+    // else
+    // {
+    //     next_symbol();
+    //     skip_ws();
+    //     // accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );
+    //     // return natural_number();
+    // }
     // else
     // {
     //     accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );        
     // }
     // m_it_curr_symb-=1;
-    accept( terminal_symbol_t::TS_MINUS );
-    
+    // if( minus == '-' )
+        accept( terminal_symbol_t::TS_MINUS );
+    // else
+        accept( terminal_symbol_t::TS_MINUS );
+
     return natural_number();
 }
 
