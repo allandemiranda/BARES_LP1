@@ -20,3 +20,4 @@ infix2postfix::infix2postfix(std::vector <std::string> _new_string){
         infix.push_back(i);
     }
 }
+
