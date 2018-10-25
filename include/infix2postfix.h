@@ -9,6 +9,18 @@
 #ifndef _INFIX2POSTFIX_H_
 #define _INFIX2POSTFIX_H_
 
+#include <string>
+#include <vector>
 
+/**
+ * @brief Class
+ * 
+ */
+class infix2postfix{
+    private:
+        std::vector <std::string> infix;
+    public:
+        infix2postfix(std::vector <std::string>);
+};
 
 #endif
