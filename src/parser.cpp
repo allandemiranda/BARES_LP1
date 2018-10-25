@@ -37,7 +37,8 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
 void Parser::next_symbol( void )
 {
     // Advances iterator to the next valid symbol for processing
-    std::advance( m_it_curr_symb, 1 );
+    // std::advance( m_it_curr_symb, 1 );
+    m_it_curr_symb++;
 }
 
 /// Checks whether we reached the end of the input expression string.
@@ -102,6 +103,31 @@ void Parser::skip_ws( void )
     }
 }
 
+char Parser::skip_u_minus()
+{
+    minusCount = 0;
+    // unsigned short minusCount(0);
+    for ( /* empty */ ; not end_input() and *(m_it_curr_symb+1) == '-'; ++minusCount )
+    { 
+        m_it_curr_symb++;
+    }
+    // m_it_curr_symb-1;
+    // if( count % 2 != 0 )
+    //     *m_it_curr_symb = '-';
+    if( minusCount % 2 == 0 )
+    {
+        minus = '+';
+        return '+';
+    }
+    else
+    {
+        // m_it_curr_symb-=1;
+        // accept( terminal_symbol_t::TS_MINUS );
+        minus = '-';
+        return '-';
+    }
+        
+}
 
 
 //=== Non Terminal Symbols (NTS) methods.
@@ -155,7 +181,9 @@ bool Parser::expression()
         else break;
 
         // After a '+' or '-' we expect a valid term, otherwise we have a missing term.
-        if ( not term() )
+        // However, we may get a "false" term() if we got a number out of range.
+        // So, we only change the error code if this is not that case (out of range).
+        if ( not term() and m_result.type == ResultType::ILL_FORMED_INTEGER )
         {
             // Make the error more specific.
             m_result.type = ResultType::MISSING_TERM;
@@ -216,6 +244,10 @@ bool Parser::is_ok_closing()
 bool Parser::term()
 {
     skip_ws();
+    auto minus( skip_u_minus() );
+    // m_it_curr_symb++;
+    // skip_ws();
+    // m_it_curr_symb-1;
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( m_it_curr_symb );
     // Vamos tokenizar o inteiro, se ele for bem formado.
@@ -225,15 +257,15 @@ bool Parser::term()
         std::string token_str;
         std::copy( begin_token, m_it_curr_symb, std::back_inserter( token_str ) );
         // Tentar realizar a conversão de string para inteiro (usar stoll()).
-        input_int_type token_int;
-        try { token_int = stoll( token_str ); }
-        catch( const std::invalid_argument & e )
-        {
-            m_result = ResultType( ResultType::ILL_FORMED_INTEGER,
-                               std::distance( m_expr.begin(), begin_token ) );
-            return false;
-        }
-
+        // input_int_type token_int;
+        // try { token_int = stoll( token_str ); }
+        // catch( const std::invalid_argument & e )
+        // {
+        //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER,
+        //                        std::distance( m_expr.begin(), begin_token ) );
+        //     return false;
+        // }
+        input_int_type token_int = stoll( token_str );
         // Recebemos um inteiro válido, resta saber se está dentro da faixa.
         if ( token_int < std::numeric_limits< required_int_type >::min() or
              token_int > std::numeric_limits< required_int_type >::max() )
@@ -272,10 +304,25 @@ bool Parser::integer()
     // Se aceitarmos um zero, então o inteiro acabou aqui.
     if ( accept( terminal_symbol_t::TS_ZERO ) )
         return true; // OK
-
+    // minus = skip_u_minus();
+    // skip_ws();
     // Vamos tentar aceitar o '-'.
+    if( minus == '-' )
+    {
+        // m_it_curr_symb-=1;
+        // m_it_curr_symb = '-';
+        accept( terminal_symbol_t::TS_MINUS );
+        return natural_number();
+        //return *m_it_curr_symb  0;
+    }
+    // else
+    // {
+    //     accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );        
+    // }
+    // m_it_curr_symb-=1;
     accept( terminal_symbol_t::TS_MINUS );
-    return  natural_number();
+    
+    return natural_number();
 }
 
 /// Validates (i.e. returns true or false) and consumes a **natural number** from the input string.

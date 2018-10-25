@@ -104,6 +104,8 @@ class Parser
         std::string::iterator m_it_curr_symb; //!< Pointer to the current char inside the expression.
         std::vector< Token > m_tk_list; //!< Resulting list of tokens extracted from the expression.
         ResultType m_result; //!< The result for the current expression (either error of OK).
+        char minus;
+        unsigned short minusCount;
 
         //=== Support methods.
         terminal_symbol_t lexer( char c_ ) const;// Get the corresponding code for a given input char.
@@ -112,7 +114,7 @@ class Parser
         bool accept( terminal_symbol_t c_ );     // Tries to accept the requested symbol.
         //bool expect( terminal_symbol_t c_ );        // Skips any WS/Tab and tries to accept the requested symbol.
         void skip_ws( void );                   // Skips any WS/Tab ans stops at the next character.
-        void skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )   
+        char skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )   
         bool end_input( void ) const;            // Checks whether we reached the end of the expression string.
 
         //=== NTS methods.
