@@ -3,5 +3,8 @@
         "*.tcc": "cpp",
         "deque": "cpp",
         "vector": "cpp"
-    }
+    },
+    "doxdocgen.generic.authorEmail": "allandemiranda@gmail.com josoeclaudiox@gmail.com",
+    "doxdocgen.generic.authorName": "Allan de Miranda - Josoé Cláudio",
+    "doxdocgen.generic.dateFormat": "DD-MM-YYYY"
 }
