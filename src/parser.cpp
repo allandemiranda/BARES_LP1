@@ -103,7 +103,7 @@ void Parser::skip_ws( void )
     }
 }
 
-char Parser::skip_u_minus()
+void Parser::skip_u_minus()
 {
     minusCount = 0;
     // unsigned short minusCount(0);
@@ -117,14 +117,14 @@ char Parser::skip_u_minus()
     if( minusCount % 2 == 0 )
     {
         minus = '+';
-        return '+';
+        // return '+';
     }
     else
     {
         // m_it_curr_symb-=1;
         // accept( terminal_symbol_t::TS_MINUS );
         minus = '-';
-        return '-';
+        // return '-';
     }
         
 }
@@ -156,7 +156,8 @@ bool Parser::expression()
         else if ( accept( Parser::terminal_symbol_t::TS_MINUS ) )
         {
             // Stores the "-" token in the list.
-            m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
+            if( minus != '-')
+                m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
         }
         else if ( accept( Parser::terminal_symbol_t::TS_TIMES ) )
         {
@@ -244,14 +245,14 @@ bool Parser::is_ok_closing()
 bool Parser::term()
 {
     skip_ws();
-    auto minus( skip_u_minus() );
+    skip_u_minus();
     // m_it_curr_symb++;
     // skip_ws();
     // m_it_curr_symb-1;
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( m_it_curr_symb );
     // Vamos tokenizar o inteiro, se ele for bem formado.
-    if( minus == '+')
+    if( minus == '+' )
     if ( integer() )
     {
         // Copiar a substring correspondente para uma variável string.
@@ -334,7 +335,7 @@ bool Parser::integer()
     // if( minus == '-' )
         accept( terminal_symbol_t::TS_MINUS );
     // else
-        accept( terminal_symbol_t::TS_MINUS );
+        // accept( terminal_symbol_t::TS_MINUS );
 
     return natural_number();
 }

@@ -114,7 +114,7 @@ class Parser
         bool accept( terminal_symbol_t c_ );     // Tries to accept the requested symbol.
         //bool expect( terminal_symbol_t c_ );        // Skips any WS/Tab and tries to accept the requested symbol.
         void skip_ws( void );                   // Skips any WS/Tab ans stops at the next character.
-        char skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )   
+        void skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )   
         bool end_input( void ) const;            // Checks whether we reached the end of the expression string.
 
         //=== NTS methods.
