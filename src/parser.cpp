@@ -13,8 +13,8 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
         case '/':  return terminal_symbol_t::TS_DIVISION;
         case '%':  return terminal_symbol_t::TS_MODULUS;
         case '^':  return terminal_symbol_t::TS_POWER;
-        case '(':  return terminal_symbol_t::TS_CLOSING_FIRST;
-        case ')':  return terminal_symbol_t::TS_CLOSING_LAST;
+        // case '(':  return terminal_symbol_t::TS_CLOSING_FIRST;
+        // case ')':  return terminal_symbol_t::TS_CLOSING_LAST;
         case ' ':  return terminal_symbol_t::TS_WS;
         case   9:  return terminal_symbol_t::TS_TAB;
         case '0':  return terminal_symbol_t::TS_ZERO;
@@ -106,27 +106,20 @@ void Parser::skip_ws( void )
 void Parser::skip_u_minus()
 {
     minusCount = 0;
-    // unsigned short minusCount(0);
+    
     for ( /* empty */ ; not end_input() and *(m_it_curr_symb+1) == '-'; ++minusCount )
     { 
         m_it_curr_symb++;
     }
-    // m_it_curr_symb-1;
-    // if( count % 2 != 0 )
-    //     *m_it_curr_symb = '-';
+    
     if( minusCount % 2 == 0 )
     {
         minus = '+';
-        // return '+';
     }
     else
     {
-        // m_it_curr_symb-=1;
-        // accept( terminal_symbol_t::TS_MINUS );
         minus = '-';
-        // return '-';
-    }
-        
+    }    
 }
 
 
@@ -144,6 +137,7 @@ void Parser::skip_u_minus()
 bool Parser::expression()
 {
     term();
+    // closing();
     // Process terms
     while( m_result.type == ResultType::OK )
     {
@@ -179,6 +173,10 @@ bool Parser::expression()
             // Stores the "^" token in the list.
             m_tk_list.emplace_back( Token( "^", Token::token_t::OPERATOR ) );
         }
+        else if ( *m_it_curr_symb == '(' or *m_it_curr_symb == ')')
+        {
+            closing();
+        }
         else break;
 
         // After a '+' or '-' we expect a valid term, otherwise we have a missing term.
@@ -190,45 +188,51 @@ bool Parser::expression()
             m_result.type = ResultType::MISSING_TERM;
         }
     }
-
+    
     return m_result.type == ResultType::OK;
 }
 
 // falta escolher a melhor estratégia para fazer
 bool Parser::closing()
 {
-    term();
-    // Process terms
-    while( m_result.type == ResultType::OK )
+    // Process closings
+    while( *m_it_curr_symb == '(' or *m_it_curr_symb == ')' )
     {
         skip_ws();
-        if ( accept( Parser::terminal_symbol_t::TS_CLOSING_FIRST ) )
+        if ( *m_it_curr_symb == '(' )
         {
             // Stores the "(" token in the list.
             m_tk_list.emplace_back( Token( "(", Token::token_t::OPERATOR ) );
+            closing_first_Count++;
+            next_symbol();
         }
-        else if ( accept( Parser::terminal_symbol_t::TS_CLOSING_LAST ) )
+        else if ( *m_it_curr_symb == ')' )
         {
             // Stores the ")" token in the list.
-            m_tk_list.emplace_back( Token( ")", Token::token_t::OPERATOR ) );
+            if( closing_first_Count >= 0 )
+            {
+                m_tk_list.emplace_back( Token( ")", Token::token_t::OPERATOR ) );
+                closing_last_Count++;
+                next_symbol();
+            }
         }
-        else break;
-
-        // falta fazer as verificações dos parenteses 
-        if ( "se for possível colocar o parêntese(closing)")
-        {
-            // Make the error more specific.
-            m_result.type = ResultType::MISSING_TERM;
-        }
+        // else break;
     }
 
     return m_result.type == ResultType::OK;
 }
 
-// em andamento
+// avalia o fechamento dos parenteses
 bool Parser::is_ok_closing()
 {
-
+    if( closing_first_Count < closing_last_Count )
+    {
+        m_result.type = ResultType::MISSING_CLOSING_FIRST;
+    }
+    else if( closing_last_Count < closing_first_Count )
+    {
+        m_result.type = ResultType::MISSING_CLOSING_LAST;
+    }
 }
 
 /// Validates (i.e. returns true or false) and consumes a **term** from the input expression string.
@@ -308,34 +312,8 @@ bool Parser::integer()
     // Se aceitarmos um zero, então o inteiro acabou aqui.
     if ( accept( terminal_symbol_t::TS_ZERO ) )
         return true; // OK
-    // minus = skip_u_minus();
-    // skip_ws();
-    // Vamos tentar aceitar o '-'.
-    // if( minus == '-' )
-    // {
-    //     // m_it_curr_symb-=1;
-    //     // m_it_curr_symb = '-';
-    //     // next_symbol();
-    //     accept( terminal_symbol_t::TS_MINUS );
-    //     return natural_number();
-    //     //return *m_it_curr_symb  0;
-    // }
-    // else
-    // {
-    //     next_symbol();
-    //     skip_ws();
-    //     // accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );
-    //     // return natural_number();
-    // }
-    // else
-    // {
-    //     accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );        
-    // }
-    // m_it_curr_symb-=1;
-    // if( minus == '-' )
-        accept( terminal_symbol_t::TS_MINUS );
-    // else
-        // accept( terminal_symbol_t::TS_MINUS );
+    
+    accept( terminal_symbol_t::TS_MINUS );
 
     return natural_number();
 }
@@ -410,7 +388,7 @@ bool Parser::digit()
  *
  * @see ResultType
  */
-Parser::ResultType  Parser::parse( std::string e_ )
+Parser::ResultType Parser::parse( std::string e_ )
 {
     m_expr = e_; //  Stores the input expression in the private class member.
     m_it_curr_symb = m_expr.begin(); // Defines the first char to be processed (consumed).
@@ -429,6 +407,7 @@ Parser::ResultType  Parser::parse( std::string e_ )
     }
     else
     {
+        // is_ok_closing();
         // Trying to validate an expression.
         if ( expression() )
         {
@@ -440,8 +419,14 @@ Parser::ResultType  Parser::parse( std::string e_ )
                         std::distance( m_expr.begin(), m_it_curr_symb ) );
             }
         }
+        // else if ( *m_it_curr_symb == '(' or *m_it_curr_symb == ')')
+        // {
+        //     closing();
+        // }
     }
-
+    // zerando contadores de closings( parenteses )
+    closing_first_Count = 0;
+    closing_last_Count = 0;
     return m_result;
 }
 

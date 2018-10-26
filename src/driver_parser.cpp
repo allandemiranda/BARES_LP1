@@ -6,6 +6,9 @@
 
 std::vector<std::string> expressions =
 {
+    "( 1 + 2 ) * ( 3 + 4 )",
+    " ( 1 - 3 * ( 18 / 2 ( 5-4 ) ) )",
+    " ( ( 2 + 3 ( ) ) )",
     "2 * 4 - 5 % 2 / 4^2^2^3 * 5 - 2",
     " -----     2 - -4",
     "---5 + --2",
@@ -46,7 +49,10 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
         case Parser::ResultType::MISSING_TERM:
             std::cout << "Missing <term> at column (" << result.at_col << ")!\n";
             break;
-        case Parser::ResultType::MISSING_CLOSING:
+        case Parser::ResultType::MISSING_CLOSING_FIRST:
+            std::cout << "Missing closing ”(”at column (" << result.at_col << ")!\n";
+            break;
+        case Parser::ResultType::MISSING_CLOSING_LAST:
             std::cout << "Missing closing ”)”at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
@@ -73,6 +79,7 @@ int main()
     {
         // Fazer o parsing desta expressão.
         auto result = my_parser.parse( expr );
+        my_parser.is_ok_closing();
         // Preparar cabeçalho da saida.
         std::cout << std::setfill('=') << std::setw(80) << "\n";
         std::cout << std::setfill(' ') << ">>> Parsing \"" << expr << "\"\n";

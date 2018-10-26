@@ -44,7 +44,8 @@ class Parser
                     UNEXPECTED_END_OF_EXPRESSION,
                     ILL_FORMED_INTEGER,
                     MISSING_TERM,
-                    MISSING_CLOSING,
+                    MISSING_CLOSING_FIRST,
+                    MISSING_CLOSING_LAST,
                     EXTRANEOUS_SYMBOL,
                     INTEGER_OUT_OF_RANGE
             };
@@ -69,6 +70,7 @@ class Parser
         ResultType parse( std::string e_ );
         /// Retrieves the list of tokens created during the partins process.
         std::vector< Token > get_tokens( void ) const;
+        bool is_ok_closing(); // para verificar se é possível inserir um closing first
 
         //==== Special methods
         /// Default constructor
@@ -90,11 +92,19 @@ class Parser
             TS_MODULUS,          //!< code for "%"   
             TS_POWER,            //!< code for "^"
             TS_ZERO,            //!< code for "0"
-            TS_CLOSING_FIRST,      //!< code for "("
-            TS_CLOSING_LAST,       //!< code for ")"
+            // TS_CLOSING_FIRST,      //!< code for "("
+            // TS_CLOSING_LAST,       //!< code for ")"
             TS_NON_ZERO_DIGIT,  //!< code for digits, from "1" to "9"
             TS_WS,              //!< code for a white-space
             TS_TAB,             //!< code for tab
+            TS_EOS,             //!< code for "End Of String"
+            TS_INVALID	        //!< invalid token
+        };
+
+        enum class delimiter 
+        {
+            TS_CLOSING_FIRST,      //!< code for "("
+            TS_CLOSING_LAST,       //!< code for ")"
             TS_EOS,             //!< code for "End Of String"
             TS_INVALID	        //!< invalid token
         };
@@ -106,6 +116,8 @@ class Parser
         ResultType m_result; //!< The result for the current expression (either error of OK).
         char minus;
         unsigned short minusCount;
+        unsigned short closing_first_Count;
+        unsigned short closing_last_Count;
 
         //=== Support methods.
         terminal_symbol_t lexer( char c_ ) const;// Get the corresponding code for a given input char.
@@ -120,7 +132,6 @@ class Parser
         //=== NTS methods.
         bool expression();
         bool closing(); // inserir um closing first e verificar se a um closing last no final
-        bool is_ok_closing(); // para verificar se é possível inserir um closing first
         bool term();
         bool integer();
         bool natural_number();

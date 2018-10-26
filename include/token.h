@@ -33,7 +33,7 @@ struct Token
         /// Just to help us debug the code.
         friend std::ostream & operator<<( std::ostream& os_, const Token & t_ )
         {
-            std::string types[] = { "OPERAND", "OPERATOR" };
+            std::string types[] = { "OPERAND", "OPERATOR", "CLOSING" };
 
             os_ << "<" << t_.value << "," << types[(int)(t_.type)] << ">";
 
