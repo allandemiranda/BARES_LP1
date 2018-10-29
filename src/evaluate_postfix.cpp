@@ -39,13 +39,13 @@ value_type evaluate_postfix::execute_operator( value_type v1, value_type v2, sym
     {
         case '^':  return pow( v1,v2 );
         case '*':  return v1*v2;
-        case '/':  if ( v2 == 0 ) throw std::runtime_error( "divisao por zero" );
+        case '/':  if ( v2 == 0 ) throw std::runtime_error( "Division by zero!" );
                    return v1/v2;
-        case '%':  if ( v2 == 0 ) throw std::runtime_error( "divisao por zero" );
+        case '%':  if ( v2 == 0 ) throw std::runtime_error( "Division by zero!" );
                    return v1%v2;
         case '+': return v1+v2;
         case '-': return v1-v2;
-        default: throw std::runtime_error( "undefined operator" );
+        default: throw std::runtime_error( "ERRO FATAL" );
     }
 }
 
@@ -67,5 +67,11 @@ value_type evaluate_postfix::evaluate_to_postfix( std::string postfix ){
         }
     }
 
-    return s.top();
+    //!< Cheking if have numeric overflow
+    auto total = s.top();
+    if((total > 32767) or (total < -32767)){
+        std::runtime_error( "Numeric overflow error!" );
+    }
+
+    return total;
 }
