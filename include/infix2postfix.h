@@ -9,8 +9,11 @@
 #ifndef _INFIX2POSTFIX_H_
 #define _INFIX2POSTFIX_H_
 
+//=== Aliases
+using value_type = long int; //!< Type we operate on.
+using symbol = char; //!< A symbol in this implementation is just a char.
+
 #include <string>
-#include <vector>
 
 /**
  * @brief Class
@@ -18,9 +21,29 @@
  */
 class infix2postfix{
     private:
-        std::vector <std::string> infix;
+        std::string e; // String inicial
+
     public:
-        infix2postfix(std::vector <std::string>);
+        // Simple helper functions that identify the incoming symbol.
+        bool is_operator( symbol );
+        bool is_operand( symbol );
+        bool is_opening_scope( symbol );
+        bool is_closing_scope( symbol );
+
+        /// Check the operand's type of association.
+        bool is_right_association( symbol );
+
+        /// Converts a char (1-digit operand) into an integer.
+        value_type char2integer( char );
+
+        /// Returns the precedence value (number) associated with an operator.
+        short get_precedence( symbol );
+
+        /// Determines whether the first operator is >= than the second operator.
+        bool has_higher_or_eq_precedence( symbol , symbol );
+
+        // Converção
+        std::string infix_to_postfix(std::string); 
 };
 
 #endif
