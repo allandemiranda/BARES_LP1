@@ -15,20 +15,20 @@ using symbol = char; //!< A symbol in this implementation is just a char.
 
 class evaluate_postfix
 {
-public:
-    /// Converts a char (1-digit operand) into an integer.
-    value_type char2integer( char );
+    public:
+        /// Change an infix expression into its corresponding postfix representation.
+        value_type evaluate_to_postfix( std::string );
+        
+    private:
+        /// Converts a char (1-digit operand) into an integer.
+        value_type char2integer( char );
 
-    // Simple helper functions that identify the incoming symbol.
-    bool is_operand( symbol );
-    bool is_operator( symbol s );
+        // Simple helper functions that identify the incoming symbol.
+        bool is_operand( symbol );
+        bool is_operator( symbol s );
 
-    /// Execute the binary operator on two operands and return the result.
-    value_type execute_operator( value_type, value_type, symbol);
-
-    /// Change an infix expression into its corresponding postfix representation.
-    value_type evaluate_to_postfix( std::string );
-
+        /// Execute the binary operator on two operands and return the result.
+        value_type execute_operator( value_type, value_type, symbol);  
 };
 
 #endif

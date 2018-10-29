@@ -19,10 +19,11 @@ using symbol = char; //!< A symbol in this implementation is just a char.
  * 
  */
 class infix2postfix{
-    private:
-        std::string e; // String inicial
-
     public:
+        // Converção
+        std::string infix_to_postfix(std::string); 
+
+    private:
         // Simple helper functions that identify the incoming symbol.
         bool is_operator( symbol );
         bool is_operand( symbol );
@@ -39,10 +40,7 @@ class infix2postfix{
         short get_precedence( symbol );
 
         /// Determines whether the first operator is >= than the second operator.
-        bool has_higher_or_eq_precedence( symbol , symbol );
-
-        // Converção
-        std::string infix_to_postfix(std::string); 
+        bool has_higher_or_eq_precedence( symbol , symbol );        
 };
 
 #endif
