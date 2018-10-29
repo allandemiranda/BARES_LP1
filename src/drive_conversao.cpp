@@ -1,9 +1,3 @@
-/**
- * @file drive_convercoies.cpp
- * @author Allan de Miranda - Josoé Cláudio (allandemiranda@gmail.com josoeclaudiox@gmail.com)
- * @version 0.1
- * @date 25-10-2018
- */
 #include <iostream>  // cout, endl
 #include <stack>     // stack
 #include <string>    // string
@@ -31,7 +25,7 @@ int main( void )
         "4/(5^2)+(6^2^3)",
         "1+ 3 * ( 4 + 8 * 3 ^7)",
         "2*2*3",
-        "2^2^3" } ;
+        "2^2^3"} ;
 
     for ( const auto& e : exps )
     {
