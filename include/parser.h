@@ -44,7 +44,6 @@ class Parser
                     UNEXPECTED_END_OF_EXPRESSION,
                     ILL_FORMED_INTEGER,
                     MISSING_TERM,
-                    MISSING_CLOSING_FIRST,
                     MISSING_CLOSING_LAST,
                     EXTRANEOUS_SYMBOL,
                     INTEGER_OUT_OF_RANGE
@@ -101,12 +100,12 @@ class Parser
             TS_INVALID	        //!< invalid token
         };
 
-        enum class delimiter 
+        enum class delimiter
         {
-            TS_CLOSING_FIRST,      //!< code for "("
-            TS_CLOSING_LAST,       //!< code for ")"
-            TS_EOS,             //!< code for "End Of String"
-            TS_INVALID	        //!< invalid token
+            DE_CLOSING_FIRST,      //!< code for "("
+            DE_CLOSING_LAST,       //!< code for ")"
+            DE_EOS,             //!< code for "End Of String"
+            DE_INVALID	        //!< invalid token
         };
 
         //==== Private members.
@@ -121,12 +120,17 @@ class Parser
 
         //=== Support methods.
         terminal_symbol_t lexer( char c_ ) const;// Get the corresponding code for a given input char.
+        delimiter d_lexer( char c_ ) const;
         void next_symbol( void );                // Advances iterator to the next char in the expression.
         //bool peek( terminal_symbol_t c_ ) const; // Peeks the current character.
-        bool accept( terminal_symbol_t c_ );     // Tries to accept the requested symbol.
+        bool accept( terminal_symbol_t c_ ); 
+        bool d_accept( delimiter c_ );     // Tries to accept the requested symbol.
         //bool expect( terminal_symbol_t c_ );        // Skips any WS/Tab and tries to accept the requested symbol.
         void skip_ws( void );                   // Skips any WS/Tab ans stops at the next character.
-        void skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )   
+        void skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )
+        void skip_closing();
+        int find_closing_first();   
+        int find_closing_last();   
         bool end_input( void ) const;            // Checks whether we reached the end of the expression string.
 
         //=== NTS methods.

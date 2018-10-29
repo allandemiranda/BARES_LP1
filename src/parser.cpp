@@ -32,6 +32,16 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
     return terminal_symbol_t::TS_INVALID;
 }
 
+Parser::delimiter  Parser::d_lexer( char c_ ) const
+{
+    switch( c_ )
+    {
+        case '(':  return delimiter::DE_CLOSING_FIRST;
+        case ')':  return delimiter::DE_CLOSING_LAST;
+        case '\0': return delimiter::DE_EOS; // end of string: the $ terminal symbol
+    }
+    return delimiter::DE_INVALID;
+}
 
 /// Consumes a valid character from the input source expression.
 void Parser::next_symbol( void )
@@ -74,6 +84,31 @@ bool Parser::accept( terminal_symbol_t c_ )
              lexer( *m_it_curr_symb ) == c_  )
     {
         next_symbol();
+        
+        // if( )
+        return true;
+    }
+    // skip_closing();
+    
+    // if( *(m_it_curr_symb) == '(' or *(m_it_curr_symb) == ')' )
+    // {
+    //     // skip_closing();
+    //     return true;
+    // }
+        
+    // else
+        return false;
+}
+
+bool Parser::d_accept( delimiter c_ )
+{
+    // If we have a match, we consume the character from the input source expression.
+    // caractere da entrada.
+    
+    if ( not end_input() and d_lexer( *m_it_curr_symb ) == c_  )
+    {
+        next_symbol();
+        // skip_closing();
         return true;
     }
 
@@ -109,7 +144,8 @@ void Parser::skip_u_minus()
     
     for ( /* empty */ ; not end_input() and *(m_it_curr_symb+1) == '-'; ++minusCount )
     { 
-        m_it_curr_symb++;
+        // m_it_curr_symb++;
+        next_symbol();
     }
     
     if( minusCount % 2 == 0 )
@@ -121,6 +157,30 @@ void Parser::skip_u_minus()
         minus = '-';
     }    
 }
+
+void Parser::skip_closing()
+{
+    auto i( (m_it_curr_symb) );
+    while( not end_input() /* and (*m_it_curr_symb == '(' */ or *m_it_curr_symb == ')' )
+    {
+        // if( *m_it_curr_symb == '(' )
+        // {
+        //     m_tk_list.emplace_back( Token( "(", Token::token_t::CLOSING ) );
+        //     m_result.type = ResultType::OK;
+        //     next_symbol();
+        // }
+        // else if( *m_it_curr_symb == ')' )
+        // {
+        //     m_tk_list.emplace_back( Token( ")", Token::token_t::CLOSING ) );
+        //     m_result.type = ResultType::OK;
+        //     next_symbol();
+        // }
+        // next_symbol();
+        ++i;
+        // if( or *m_it_curr_symb == ')' )
+    }
+} 
+
 
 
 //=== Non Terminal Symbols (NTS) methods.
@@ -136,57 +196,193 @@ void Parser::skip_u_minus()
  */
 bool Parser::expression()
 {
+    // closing();
+    // skip_ws();
+    // skip_closing();
     term();
     // closing();
+    closing_first_Count = 0;
+    closing_last_Count = 0;
     // Process terms
-    while( m_result.type == ResultType::OK )
+    while( m_result.type == ResultType::OK /*or ( *m_it_curr_symb == '(' or *m_it_curr_symb == ')' ) */)
     {
         skip_ws();
+        // skip_closing();
         if ( accept( Parser::terminal_symbol_t::TS_PLUS ) )
         {
             // Stores the "+" token in the list.
-            m_tk_list.emplace_back( Token( "+", Token::token_t::OPERATOR ) );
+            // if( *(m_it_curr_symb-1) >= '0' and *(m_it_curr_symb+1) <= '9' )
+            // {
+                m_tk_list.emplace_back( Token( "+", Token::token_t::OPERATOR ) );
+            // }
+            // else
+            // {
+            //     m_result.type = ResultType::MISSING_TERM;
+            //     break;
+            // }
+            // else
+            // {
+            //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //                     std::distance( m_expr.begin(), m_it_curr_symb ) );
+            // }
+            // skip_closing();
         }
         else if ( accept( Parser::terminal_symbol_t::TS_MINUS ) )
         {
             // Stores the "-" token in the list.
             if( minus != '-')
+            {
                 m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
+                // skip_closing();
+            }
         }
         else if ( accept( Parser::terminal_symbol_t::TS_TIMES ) )
         {
             // Stores the "*" token in the list.
-            m_tk_list.emplace_back( Token( "*", Token::token_t::OPERATOR ) );
+            // if( *(m_it_curr_symb-1) >= '0' and not end_input() and *(m_it_curr_symb+1) <= '9' )
+            // {
+                m_tk_list.emplace_back( Token( "*", Token::token_t::OPERATOR ) );
+            // }
+            // else
+            // {
+            //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //                     std::distance( m_expr.begin(), m_it_curr_symb ) );
+            // }
+            // skip_closing();
         }
         else if ( accept( Parser::terminal_symbol_t::TS_DIVISION ) )
         {
             // Stores the "/" token in the list.
-            m_tk_list.emplace_back( Token( "/", Token::token_t::OPERATOR ) );
+            // if( *(m_it_curr_symb-1) >= '0' and not end_input() and *(m_it_curr_symb+1) <= '9' )
+            // {
+                m_tk_list.emplace_back( Token( "/", Token::token_t::OPERATOR ) );
+            // }
+            // else
+            // {
+            //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //                     std::distance( m_expr.begin(), m_it_curr_symb ) );
+            // }
+            // skip_closing();
         }
         else if ( accept( Parser::terminal_symbol_t::TS_MODULUS ) )
         {
             // Stores the "%" token in the list.
-            m_tk_list.emplace_back( Token( "%", Token::token_t::OPERATOR ) );
+            // if( *(m_it_curr_symb-1) >= '0' and not end_input() and *(m_it_curr_symb+1) <= '9' )
+            // {
+                m_tk_list.emplace_back( Token( "%", Token::token_t::OPERATOR ) );
+            // }
+            // else
+            // {
+            //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //                     std::distance( m_expr.begin(), m_it_curr_symb ) );
+            // }
+            // skip_closing();
         }
         else if ( accept( Parser::terminal_symbol_t::TS_POWER ) )
         {
             // Stores the "^" token in the list.
-            m_tk_list.emplace_back( Token( "^", Token::token_t::OPERATOR ) );
+            // if( *(m_it_curr_symb-1) >= '0' and not end_input() and *(m_it_curr_symb+1) <= '9' )
+            // {
+                m_tk_list.emplace_back( Token( "^", Token::token_t::OPERATOR ) );
+            // }
+            // else
+            // {
+            //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //                     std::distance( m_expr.begin(), m_it_curr_symb ) );
+            // }
+            // skip_closing();
         }
-        else if ( *m_it_curr_symb == '(' or *m_it_curr_symb == ')')
+        else if ( d_accept( Parser::delimiter::DE_CLOSING_FIRST ) )
         {
-            closing();
+            // Stores the "(" token in the list.
+            // if( not end_input() and *(m_it_curr_symb+1) != ')' )
+            if( not end_input() and *(m_it_curr_symb+1) == ')' )
+            {
+                m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+                                std::distance( m_expr.begin(), m_it_curr_symb ) );
+                // closing_last_Count++;
+                // next_symbol();
+                // return false;
+            }
+            // else
+            // {
+                m_tk_list.emplace_back( Token( "(", Token::token_t::CLOSING ) );
+                ++closing_first_Count;
+            // }
+                
+            // skip_closing();
         }
+        else if ( d_accept( Parser::delimiter::DE_CLOSING_LAST ) )
+        {
+            // Stores the ")" token in the list.
+            
+            if( closing_first_Count == 0 or ( m_tk_list.back().type == Token::token_t::OPERATOR and closing_last_Count < closing_first_Count ) )
+            {
+                m_result = ResultType( ResultType::EXTRANEOUS_SYMBOL, 
+                                std::distance( m_expr.begin(), m_it_curr_symb ) );
+                // return false;
+            }
+            // else
+            // {
+                m_tk_list.emplace_back( Token( ")", Token::token_t::CLOSING ) );
+                ++closing_last_Count;
+            // }
+            if( end_input() and closing_last_Count < closing_first_Count )
+            {
+                // m_result.type = ResultType::MISSING_CLOSING_LAST;
+                m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+            }
+            // next_symbol();
+            // skip_closing();
+        }
+        // else if ( *m_it_curr_symb == '(' )
+        // {
+        //     // closing();
+        //     m_result.type = ResultType::OK;
+        // }
+        // else if ( *m_it_curr_symb == '(' or *m_it_curr_symb == ')' )
+        // {
+        //     // closing();
+        //     skip_closing();
+        //     skip_ws();
+        //     skip_u_minus();
+        //     next_symbol();
+        //     // m_result.type = ResultType::OK;
+        // }
         else break;
 
         // After a '+' or '-' we expect a valid term, otherwise we have a missing term.
         // However, we may get a "false" term() if we got a number out of range.
         // So, we only change the error code if this is not that case (out of range).
-        if ( not term() and m_result.type == ResultType::ILL_FORMED_INTEGER )
+        // skip_closing();
+        // is_ok_closing();
+        // std::cout << "closing first = " << closing_first_Count << " | " << "closing last = " << closing_last_Count << std::endl;
+
+        // if( end_input() and closing_last_Count < closing_first_Count )
+        // {
+        //     // m_result.type = ResultType::MISSING_CLOSING_LAST;
+        //     m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+        //     return false;
+        // }
+
+        if ( not term() and m_result.type == ResultType::ILL_FORMED_INTEGER /*and (*(m_it_curr_symb-1) != '(' or *(m_it_curr_symb-1) != ')' )*/ )
         {
             // Make the error more specific.
-            m_result.type = ResultType::MISSING_TERM;
+            // skip_ws();
+            // skip_u_minus();
+            // is_ok_closing();
+            // skip_closing();
+            if( *(m_it_curr_symb-1) != '(' and *(m_it_curr_symb-1) != ')' )
+                m_result.type = ResultType::MISSING_TERM;
+            else
+                m_result.type = ResultType::OK;
         }
+
+        // if( end_input() and closing_last_Count < closing_first_Count )
+        // {
+        //     // m_result.type = ResultType::MISSING_CLOSING_LAST;
+        //     m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+        // }
     }
     
     return m_result.type == ResultType::OK;
@@ -196,25 +392,26 @@ bool Parser::expression()
 bool Parser::closing()
 {
     // Process closings
+    skip_ws();
     while( *m_it_curr_symb == '(' or *m_it_curr_symb == ')' )
     {
         skip_ws();
         if ( *m_it_curr_symb == '(' )
         {
             // Stores the "(" token in the list.
-            m_tk_list.emplace_back( Token( "(", Token::token_t::OPERATOR ) );
+            m_tk_list.emplace_back( Token( "(", Token::token_t::CLOSING ) );
             closing_first_Count++;
             next_symbol();
         }
         else if ( *m_it_curr_symb == ')' )
         {
             // Stores the ")" token in the list.
-            if( closing_first_Count >= 0 )
-            {
-                m_tk_list.emplace_back( Token( ")", Token::token_t::OPERATOR ) );
+            // if( closing_first_Count >= 0 )
+            // {
+                m_tk_list.emplace_back( Token( ")", Token::token_t::CLOSING ) );
                 closing_last_Count++;
                 next_symbol();
-            }
+            // }
         }
         // else break;
     }
@@ -225,14 +422,19 @@ bool Parser::closing()
 // avalia o fechamento dos parenteses
 bool Parser::is_ok_closing()
 {
-    if( closing_first_Count < closing_last_Count )
-    {
-        m_result.type = ResultType::MISSING_CLOSING_FIRST;
-    }
-    else if( closing_last_Count < closing_first_Count )
-    {
-        m_result.type = ResultType::MISSING_CLOSING_LAST;
-    }
+    // if( end_input() and closing_first_Count < closing_last_Count )
+    // {
+    //     // m_result.type = ResultType::MISSING_CLOSING_FIRST;
+    //     m_result = ResultType( ResultType::MISSING_CLOSING_FIRST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+    //     return false;
+    // }
+    // if( closing_last_Count < closing_first_Count )
+    // {
+    //     // m_result.type = ResultType::MISSING_CLOSING_LAST;
+    //      m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+    //     return false;
+    // }
+    return true;
 }
 
 /// Validates (i.e. returns true or false) and consumes a **term** from the input expression string.
@@ -249,7 +451,9 @@ bool Parser::is_ok_closing()
 bool Parser::term()
 {
     skip_ws();
+    // skip_closing();
     skip_u_minus();
+    // skip_closing();
     // m_it_curr_symb++;
     // skip_ws();
     // m_it_curr_symb-1;
@@ -257,42 +461,87 @@ bool Parser::term()
     auto begin_token( m_it_curr_symb );
     // Vamos tokenizar o inteiro, se ele for bem formado.
     if( minus == '+' )
-    if ( integer() )
     {
-        // Copiar a substring correspondente para uma variável string.
-        std::string token_str;
-        std::copy( begin_token, m_it_curr_symb, std::back_inserter( token_str ) );
-        // Tentar realizar a conversão de string para inteiro (usar stoll()).
-        // input_int_type token_int;
-        // try { token_int = stoll( token_str ); }
-        // catch( const std::invalid_argument & e )
-        // {
-        //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER,
-        //                        std::distance( m_expr.begin(), begin_token ) );
-        //     return false;
-        // }
-        input_int_type token_int = stoll( token_str );
-        // Recebemos um inteiro válido, resta saber se está dentro da faixa.
-        if ( token_int < std::numeric_limits< required_int_type >::min() or
-             token_int > std::numeric_limits< required_int_type >::max() )
+        if ( integer() )
         {
-            // Fora da faixa, reportar erro.
-            m_result = ResultType( ResultType::INTEGER_OUT_OF_RANGE, 
-                               std::distance( m_expr.begin(), begin_token ) );
+            // Copiar a substring correspondente para uma variável string.
+            std::string token_str;
+            std::copy( begin_token, m_it_curr_symb, std::back_inserter( token_str ) );
+            // Tentar realizar a conversão de string para inteiro (usar stoll()).
+            // input_int_type token_int;
+            // try { token_int = stoll( token_str ); }
+            // catch( const std::invalid_argument & e )
+            // {
+            //     m_result = ResultType( ResultType::ILL_FORMED_INTEGER,
+            //                        std::distance( m_expr.begin(), begin_token ) );
+            //     return false;
+            // }
+            input_int_type token_int = stoll( token_str );
+            // Recebemos um inteiro válido, resta saber se está dentro da faixa.
+            if ( token_int < std::numeric_limits< required_int_type >::min() or
+                token_int > std::numeric_limits< required_int_type >::max() )
+            {
+                // Fora da faixa, reportar erro.
+                m_result = ResultType( ResultType::INTEGER_OUT_OF_RANGE, 
+                                std::distance( m_expr.begin(), begin_token ) );
+            }
+            else
+            {
+                // Coloca o novo token na nossa lista de tokens.
+                m_tk_list.emplace_back( Token( token_str, Token::token_t::OPERAND ) );
+            }
+            
         }
         else
         {
-            // Coloca o novo token na nossa lista de tokens.
-            m_tk_list.emplace_back( Token( token_str, Token::token_t::OPERAND ) );
+            // Create the corresponding error.
+            if( *m_it_curr_symb != '(' and *m_it_curr_symb != ')' )
+            m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
+                    std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
         }
-    }
-    else
-    {
-        // Create the corresponding error.
-        m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-    }
+        // else if( *m_it_curr_symb == '(' or *m_it_curr_symb == ')' )
+        // {
+        //     m_result.type = ResultType::OK;
+        //     return true;
+        // }
+        // else if( *(m_it_curr_symb) >= '0' and *(m_it_curr_symb) <= '9' and *m_it_curr_symb != '(' and *m_it_curr_symb != ')' )
+        // {
+        //     // Create the corresponding error.
+        //     // if( *(m_it_curr_symb-1) < '0' and *(m_it_curr_symb) >= '9' )
+        //     // {
+        //         m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( m_expr.begin(), m_it_curr_symb ) );
+        //         // return m_result.type;
+        //     // } 
+        // }
+        // else if ( not integer() and *m_it_curr_symb != '(' and *m_it_curr_symb != ')' )
+        // {
+        //     // Create the corresponding error.
+        //     m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
+        //             std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
+        // }
+        // if(  *(m_it_curr_symb) >= '0' and *(m_it_curr_symb) <= '9' and *(m_it_curr_symb-1) == ')' or *(m_it_curr_symb+1) == '(' )
+        //     {
+        //         m_result =  ResultType( ResultType::UNEXPECTED_END_OF_EXPRESSION, std::distance( m_expr.begin(), m_it_curr_symb ) );
+        //         // return m_result.type;
+        //     }
+        
+        
+        // if( *(m_it_curr_symb-1) == ')' )
+        // {
+        //     m_result =  ResultType( ResultType::EXTRANEOUS_SYMBOL, std::distance( m_expr.begin(), m_it_curr_symb ) );
+        //     return m_result.type;
+        // }
+    } 
+
+    // if( *m_it_curr_symb == '(' or *m_it_curr_symb == ')' )
+    // {
+    //     return m_result.type == ResultType::OK;
+    // }
     // else
+    // {
     //     next_symbol();
+    // }
+        
     return m_result.type == ResultType::OK;
 }
 
@@ -314,7 +563,7 @@ bool Parser::integer()
         return true; // OK
     
     accept( terminal_symbol_t::TS_MINUS );
-
+    
     return natural_number();
 }
 
@@ -388,6 +637,33 @@ bool Parser::digit()
  *
  * @see ResultType
  */
+
+int Parser::find_closing_first()
+{
+    auto result( m_it_curr_symb );
+    auto i = 0;
+    for ( /* empty */ ; not end_input() and *(m_it_curr_symb) != '('; )
+    { 
+        // m_it_curr_symb++;
+        result -= 1;
+        ++i;
+    }
+    return i;
+}
+
+int Parser::find_closing_last()
+{
+    auto result( m_it_curr_symb );
+    auto i = 0;
+    for ( /* empty */ ; not end_input() and *(m_it_curr_symb) != ')'; )
+    { 
+        // m_it_curr_symb++;
+        result -= 1;
+        ++i;
+    }
+    return i;
+}
+
 Parser::ResultType Parser::parse( std::string e_ )
 {
     m_expr = e_; //  Stores the input expression in the private class member.
@@ -399,6 +675,15 @@ Parser::ResultType Parser::parse( std::string e_ )
 
     // Let us ignore any leading white spaces.
     skip_ws();
+    // skip_closing();
+
+    // if( closing_last_Count < closing_first_Count )
+    // {
+    //     // m_result.type = ResultType::MISSING_CLOSING_LAST;
+    //     m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+    //     // return false;
+    // }
+
     if ( end_input() ) // Premature end?
     {
         // Input has finished before we even started to parse...
@@ -407,26 +692,36 @@ Parser::ResultType Parser::parse( std::string e_ )
     }
     else
     {
-        // is_ok_closing();
         // Trying to validate an expression.
         if ( expression() )
         {
             // At this point there should not be any non-whitespace character in the input expression.
             skip_ws(); // Anyway, let us clear any remaining 'whitespaces'.
-            if ( not end_input() ) // Still got a symbol?
+            // skip_closing();
+            if( end_input() and closing_last_Count < closing_first_Count )
+            {
+                // m_result.type = ResultType::MISSING_CLOSING_LAST;
+                // find_closing_last();
+                m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
+            }
+
+            if ( not end_input() /*and ( *m_it_curr_symb != '(' and *m_it_curr_symb != ')' )*/ ) // Still got a symbol?
             {
                 m_result =  ResultType( ResultType::EXTRANEOUS_SYMBOL,
                         std::distance( m_expr.begin(), m_it_curr_symb ) );
             }
         }
+        
+
         // else if ( *m_it_curr_symb == '(' or *m_it_curr_symb == ')')
         // {
         //     closing();
         // }
     }
     // zerando contadores de closings( parenteses )
-    closing_first_Count = 0;
-    closing_last_Count = 0;
+    // is_ok_closing();
+    // closing_first_Count = 0;
+    // closing_last_Count = 0;
     return m_result;
 }
 
