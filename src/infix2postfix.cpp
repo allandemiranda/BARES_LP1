@@ -1,12 +1,8 @@
 /**
  * @file infix2postfix.cpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Allan de Miranda - Josoé Cláudio (allandemiranda@gmail.com josoeclaudiox@gmail.com)
  * @version 0.1
- * @date 2018-10-29
- * 
- * @copyright Copyright (c) 2018
- * 
+ * @date 25-10-2018
  */
 
 #include <stack>     // stack

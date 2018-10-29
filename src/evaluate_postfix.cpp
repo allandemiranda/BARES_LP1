@@ -1,3 +1,9 @@
+/**
+ * @file evaluate_postfix.cpp
+ * @author Allan de Miranda - Josoé Cláudio (allandemiranda@gmail.com josoeclaudiox@gmail.com)
+ * @version 0.1
+ * @date 25-10-2018
+ */
 #include <stack>     // stack
 #include <string>    // string
 #include <cassert>   // assert

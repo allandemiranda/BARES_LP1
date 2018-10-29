@@ -1,3 +1,9 @@
+/**
+ * @file evaluate_postfix.h
+ * @author Allan de Miranda - Josoé Cláudio (allandemiranda@gmail.com josoeclaudiox@gmail.com)
+ * @version 0.1
+ * @date 25-10-2018
+ */
 #ifndef _EVALUATE_POSTFIX_H_
 #define _EVALUATE_POSTFIX_H_
 

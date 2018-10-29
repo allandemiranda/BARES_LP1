@@ -1,3 +1,9 @@
+/**
+ * @file drive_convercoies.cpp
+ * @author Allan de Miranda - Josoé Cláudio (allandemiranda@gmail.com josoeclaudiox@gmail.com)
+ * @version 0.1
+ * @date 25-10-2018
+ */
 #include <iostream>  // cout, endl
 #include <stack>     // stack
 #include <string>    // string
