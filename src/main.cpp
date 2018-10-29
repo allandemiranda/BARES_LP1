@@ -16,7 +16,7 @@
 
 std::vector < std::string > expressions = 
 {
-    "10000000 - 2",
+    "1 - 2",
     "2+",
     "3 * d",
     "2 = 3",
