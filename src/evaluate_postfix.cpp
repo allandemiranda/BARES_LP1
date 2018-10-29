@@ -68,7 +68,7 @@ value_type evaluate_postfix::evaluate_to_postfix( std::string postfix ){
     }
 
     //!< Cheking if have numeric overflow
-    auto total = s.top();
+    long int total = s.top();
     if((total > 32767) or (total < -32767)){
         throw std::runtime_error( "Numeric overflow error!" );
     }

@@ -9,10 +9,6 @@
 #include "infix2postfix.cpp" // -----> ISSO AQUI ACHO QUE APAGA
 #include "evaluate_postfix.cpp" // -----> ISSO AQUI ACHO QUE APAGA
 
-//=== Aliases
-using value_type = long int; //!< Type we operate on.
-using symbol = char; //!< A symbol in this implementation is just a char.
-
 int main( void )
 {
     // Class
@@ -22,7 +18,8 @@ int main( void )
 
     // A expression is a queue of sysmbols (chars).
     std::vector< std::string > exps {
-        "4/(5^2)+(6^2^3)",
+        "20+1",
+        "4/(5^2)+1",
         "1+ 3 * ( 4 + 8 * 3 ^7)",
         "2*2*3",
         "2^2^3"} ;

@@ -1,42 +1,20 @@
+/**
+ * @file main.cpp
+ * @brief evaluate_postfix class functions
+ * @author Allan de Miranda - Josoé Cláudio (allandemiranda@gmail.com josoeclaudiox@gmail.com)
+ * @version 0.1
+ * @date 25-10-2018
+ */
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
 
-#include "../include/parser.h"
-
-// std::vector<std::string> expressions =
-// {
-//     "( 1 + 2 ) * ( 3 + 4 )",
-//     " (2 * 3) + (4 / 2)",
-//     " 2 ( 4 - ( 8 + ( ",
-//     " ) * 2 - ) 8 (",
-//     " ( 2 + ) 2  - 4 ",
-//     " ((2%3) * 8",
-//     " 2 / 4 + ( 10 + ( 8 * 2 ) )",
-//     " ( 1 - 3 * ( 18 / 2 ( 5-4 ) ) )",
-//     " ( ( 2 + 3 ( ) ) )",
-//     "2 * 4 - 5 % 2 / 4^2^2^3 * 5 - 2",
-//     " -----     2 - -4",
-//     "---5 + --2",
-//     "-3 * 2",
-//     "4 + 03",
-//     "10",
-//     "    12    +    4   8",
-//     "32767 - 32768 + 3",
-//     "5 + -32766",
-//     "5 + -32769",
-//     "12 + 3",
-//     "-3+-5+-6",
-//     "12 + 3     -3 + -34 ",
-//     "+12",
-//     "1.3 * 4",
-//     "a + 4",
-//     "       ",
-//     "  123 *  548",
-//     "4 + ",
-//     "32a23",
-//     "43 + 54 -   "
-// };
+#include "../include/parser.h" 
+#include "../include/infix2postfix.h" 
+#include "../include/evaluate_postfix.h" 
+//#include "infix2postfix.cpp" // -----> ISSO AQUI ACHO QUE APAGA
+//#include "evaluate_postfix.cpp" // -----> ISSO AQUI ACHO QUE APAGA
 
 std::vector < std::string > expressions = 
 {
@@ -60,6 +38,12 @@ std::vector < std::string > expressions =
     "20*20000"
 };
 
+/**
+ * @brief 
+ * 
+ * @param result 
+ * @param str 
+ */
 void print_error_msg( const Parser::ResultType & result, std::string str )
 {
     std::string error_indicator( str.size()+1, ' ');
@@ -96,9 +80,11 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
 }
 
 
-int main()
+int main(void)
 {
     Parser my_parser; // Instancia um parser.
+    infix2postfix expressao_incial;
+    evaluate_postfix gerar_resultado;
     // Tentar analisar cada expressão da lista.
     for( const auto & expr : expressions )
     {
@@ -113,8 +99,10 @@ int main()
             print_error_msg( result, expr );
         else
         {
-            std::cout << ">>> Expression SUCCESSFULLY parsed!\n";
-            /// parte de Allan
+            //// parte de Allan
+            auto postfix = expressao_incial.infix_to_postfix( expr );
+            auto result = gerar_resultado.evaluate_to_postfix( postfix );
+            std::cout << ">>> Result is: " << result << std::endl;
         }
 
          // Recuperar a lista de tokens.
