@@ -13,8 +13,6 @@
 #include "../include/parser.h" 
 #include "../include/infix2postfix.h" 
 #include "../include/evaluate_postfix.h" 
-//#include "infix2postfix.cpp" // -----> ISSO AQUI ACHO QUE APAGA
-//#include "evaluate_postfix.cpp" // -----> ISSO AQUI ACHO QUE APAGA
 
 std::vector < std::string > expressions = 
 {
