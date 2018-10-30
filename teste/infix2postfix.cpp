@@ -10,9 +10,6 @@
  * @brief Aliase's and Include's
  * 
  */
-using value_type = long int;    //!< Type we operate on.
-using symbol = char;            //!< A symbol in this implementation is just a char.
-
 #include <stack>     //!< stack
 #include <string>    //!< std::string
 #include <cassert>   //!< assert
@@ -20,6 +17,7 @@ using symbol = char;            //!< A symbol in this implementation is just a c
 #include <vector>    //!< std::vector
 
 #include "../include/infix2postfix.h" //!< Class way
+#include "../include/token.h" //!< Class way
 
 bool infix2postfix::is_operator( symbol s ){
     return (std::string("*^/%+-").find( s ) != std::string::npos);
@@ -79,19 +77,19 @@ bool infix2postfix::has_higher_or_eq_precedence( symbol op1 , symbol op2 ){
     }
 }
 
-std::string infix2postfix::infix_to_postfix( std::string infix ){
+std::vector <symbol> infix2postfix::infix_to_postfix( std::vector <symbol> infix ){
     std::string postfix(""); //!< Conversion result
     std::stack< symbol > s; //!< Stack for help on conversion
     //!< Scroll through the entry, to process each item / token / character
-    for( auto c : infix ){        
+    for( symbol c : infix ){        
         //!< Operating goes straight to the exit
-        if( is_operand( c ) ){
-            postfix += c;
+        if(c.type() == Token::token_t::OPERAND){
+            postfix += c.value();
         } else {
-            if( is_opening_scope(c) ){
-                s.push( c ); //!< '(' enters the waiting stack on top of
+            if( is_opening_scope(c.value()) ){
+                s.push( c.value() ); //!< '(' enters the waiting stack on top of
             } else {
-                if( is_closing_scope(c) ){
+                if( is_closing_scope(c.value()) ){
                     //!< Unpack to find the corresponding opening scope
                     while( not is_opening_scope( s.top() ) ){
                         postfix += s.top();
@@ -99,17 +97,17 @@ std::string infix2postfix::infix_to_postfix( std::string infix ){
                     }
                     s.pop(); //!< Remember to discard the '(' which is at the top of the stack
                 } else {
-                    if ( is_operator( c ) ){ 
+                    if ( is_operator( c.value() ) ){ 
                         //!< + - ^ *...        
                         //!< Perform waiting operations that are equal to or greater than
                         //!< in priority (except for the right-left association)
-                        while( not s.empty() and has_higher_or_eq_precedence( s.top(), c ) ){ 
+                        while( not s.empty() and has_higher_or_eq_precedence( s.top(), c.value() ) ){ 
                             //!< s.top() >= c
                             postfix += s.top();
                             s.pop();
                         }
                         //!< The operation that arrives, always has to wait
-                        s.push( c );
+                        s.push( c.value() );
                      }
                 }
             }
@@ -117,10 +115,19 @@ std::string infix2postfix::infix_to_postfix( std::string infix ){
     }
 
     //!< Unload the pending battery operations
+    std::vector <symbol> temp;
     while( not s.empty() ){
-        postfix += s.top();
+        if(s.type() == Token::token_t::OPERAND){
+            temp.push_back(s.value(), Token::token_t::OPERAND);
+        } else {
+            if(s.type() == Token::token_t::OPERATOR){
+                temp.push_back(s.value(), Token::token_t::OPERATOR);
+            } else {
+                temp.push_back(s.value(), Token::token_t::CLOSING);
+            }
+        }
         s.pop();
     }
 
-    return postfix;
+    return temp;
 }

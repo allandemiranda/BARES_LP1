@@ -10,9 +10,6 @@
  * @brief Aliase's and Include's
  * 
  */
-using value_type = long int;    //!< Type we operate on.
-using symbol = char;            //!< A symbol in this implementation is just a char.
-
 #include <stack>     //!< stack
 #include <string>    //!< string
 #include <cassert>   //!< assert
@@ -21,6 +18,7 @@ using symbol = char;            //!< A symbol in this implementation is just a c
 #include <vector>    //!< std::vector
 
 #include "../include/evaluate_postfix.h" //!< Class way
+#include "../include/token.h" //!< Class way
 
 value_type evaluate_postfix::char2integer( char c ){ 
     return (c - '0'); 
@@ -49,14 +47,14 @@ std::string evaluate_postfix::execute_operator( value_type v1, value_type v2, sy
     }
 }
 
-std::string evaluate_postfix::evaluate_to_postfix( std::string postfix ){
+std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix ){
     std::stack< value_type > s;
 
-    for( auto c : postfix ){
-        if ( is_operand( c ) ){
-            s.push( char2integer( c ) );
+    for( symbol c : postfix ){
+        if(c.type() == Token::token_t::OPERAND){
+            s.push( char2integer( c.value() ) );
         } else {
-            if ( is_operator( c ) ){
+            if ( is_operator( c.value() ) ){
                 value_type op2 = s.top(); s.pop();
                 value_type op1 = s.top(); s.pop();
                 auto result = execute_operator( op1, op2, c ); // ( 2, 9, '*' )
