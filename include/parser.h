@@ -91,8 +91,6 @@ class Parser
             TS_MODULUS,          //!< code for "%"   
             TS_POWER,            //!< code for "^"
             TS_ZERO,            //!< code for "0"
-            // TS_CLOSING_FIRST,      //!< code for "("
-            // TS_CLOSING_LAST,       //!< code for ")"
             TS_NON_ZERO_DIGIT,  //!< code for digits, from "1" to "9"
             TS_WS,              //!< code for a white-space
             TS_TAB,             //!< code for tab
@@ -113,29 +111,33 @@ class Parser
         std::string::iterator m_it_curr_symb; //!< Pointer to the current char inside the expression.
         std::vector< Token > m_tk_list; //!< Resulting list of tokens extracted from the expression.
         ResultType m_result; //!< The result for the current expression (either error of OK).
-        char minus;
-        unsigned short minusCount;
-        unsigned short closing_first_Count;
-        unsigned short closing_last_Count;
+        char minus; /// retorno da função skip_u_minus
+        unsigned short minusCount; /// contador de '-' unário
+        unsigned short closing_first_Count; /// contador de '('
+        unsigned short closing_last_Count; /// contador de ')'
 
         //=== Support methods.
-        terminal_symbol_t lexer( char c_ ) const;// Get the corresponding code for a given input char.
+        terminal_symbol_t lexer( char c_ ) const;/// Get the corresponding code for a given input char.
         delimiter d_lexer( char c_ ) const;
-        void next_symbol( void );                // Advances iterator to the next char in the expression.
-        //bool peek( terminal_symbol_t c_ ) const; // Peeks the current character.
-        bool accept( terminal_symbol_t c_ ); 
-        bool d_accept( delimiter c_ );     // Tries to accept the requested symbol.
-        //bool expect( terminal_symbol_t c_ );        // Skips any WS/Tab and tries to accept the requested symbol.
-        void skip_ws( void );                   // Skips any WS/Tab ans stops at the next character.
-        void skip_u_minus( void );              // Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + )
+        void next_symbol( void );                /// Advances iterator to the next char in the expression.
+        //bool peek( terminal_symbol_t c_ ) const; /// Peeks the current character.
+        bool accept( terminal_symbol_t c_ ); /// Tries to accept the requested terminal symbols
+        bool d_accept( delimiter c_ );     /// Tries to accept the requested delimiter symbol.
+        //bool expect( terminal_symbol_t c_ );        /// Skips any WS/Tab and tries to accept the requested symbol.
+        void skip_ws( void );                   /// Skips any WS/Tab ans stops at the next character.
+        void skip_u_minus( void );              /// Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + ) and put the result in minus variable
+
+        // desnecessário no momento
         void skip_closing();
         int find_closing_first();   
-        int find_closing_last();   
-        bool end_input( void ) const;            // Checks whether we reached the end of the expression string.
+        int find_closing_last();
+        // 
+        bool end_input( void ) const;            /// Checks whether we reached the end of the expression string.
 
         //=== NTS methods.
         bool expression();
-        bool closing(); // inserir um closing first e verificar se a um closing last no final
+        /// desnecessário no momento
+        bool closing(); /// inserir um closing first e verificar se a um closing last no final
         bool term();
         bool integer();
         bool natural_number();
