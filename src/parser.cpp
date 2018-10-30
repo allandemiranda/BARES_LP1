@@ -190,6 +190,12 @@ bool Parser::expression()
     
     term();
 
+    if( *m_it_curr_symb == '-' and *(m_it_curr_symb-1) == '-' and *(m_it_curr_symb+1) == ' ' )
+    {
+        m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+                                std::distance( m_expr.begin(), m_it_curr_symb ) );
+        return false;
+    }
     closing_first_Count = 0;
     closing_last_Count = 0;
     // Process terms
