@@ -111,11 +111,13 @@ int main()
         std::cout << std::setw(20) <<  std::left << expr;
         if ( result.type != Parser::ResultType::OK )
             print_error_msg(result);
+        /* ALLAN
         else{            
             auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
             auto result = gerar_resultado.evaluate_to_postfix( postfix );
             std::cout << " " << result << std::endl;
-        }      
+        } 
+        */     
     }
 
     return EXIT_SUCCESS;
