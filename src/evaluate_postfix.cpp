@@ -60,7 +60,7 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
     }
 
     //!< Cheking if have numeric overflow
-    long int total = s.top();
+    value_type total = s.top();
     if((total > 32767) or (total < -32767)){
         return ( "Numeric overflow error!" );
     }

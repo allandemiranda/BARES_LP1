@@ -11,15 +11,17 @@ O projeto tem como intuito desenvolver uma calculadora utilizando as ferramentas
 
 ## Instalação e execução
 
-Para instalar e executar o programa siga as instruções: 
+Para instalar o programa siga as instruções: 
 
-1. `parte um`
+1. Abra o terminal do seu sistema operacional e digite ...
 
-2. `parte dois`
+2. `git clone https://github.com/allandemiranda/BARES_LP1.git`
 
-3. `parte três`
+3. `cd BARES_LP1`
 
-4. `parte quatro`
+4. `g++ -std=c++11 ./src/*.cpp -I ./include/*.h -o ./bin/bares.o`
+
+
 
 ## Operações suportadas na calculadora
 

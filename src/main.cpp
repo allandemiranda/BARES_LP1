@@ -74,8 +74,9 @@ int main(int argc, char const *argv[])
             print_error_msg(result);
         else{            
             auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
-            auto result = gerar_resultado.evaluate_to_postfix( postfix );
-            std::cout << " " << result << std::endl;
+            //auto result = gerar_resultado.evaluate_to_postfix( postfix );
+            //std::cout << " " << result;
+            std::cout << std::endl;
         }    
     }
 
