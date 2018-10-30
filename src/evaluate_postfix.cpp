@@ -43,7 +43,7 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
     
     for( symbol c : postfix ){
         if(c.type == Token::token_t::OPERAND){
-            s.push(  stoi(c.value) );
+            s.push(  stoll(c.value) );
         } else {
             if ( is_operator( c.value ) ){
                 value_type op2 = s.top(); s.pop();
@@ -52,7 +52,7 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
                 if(result == ( "Division by zero!" )){
                     return result;
                 }
-                s.push( stoi(result) );
+                s.push( stoll(result) );
             } else {
                 assert( false );
             }

@@ -14,6 +14,7 @@
  * 
  */
 #include <string> //!< std::string.
+#include <vector> //!< std::vector
 
 #include "../include/token.h" //!< Class way
 
@@ -31,23 +32,6 @@ class evaluate_postfix
         std::string evaluate_to_postfix( std::vector <symbol> );
         
     private:
-        /// Converts a char (1-digit operand) into an integer.
-
-        /**
-         * @brief Converts a char (1-digit operand) into an integer
-         * 
-         * @return value_type The converted
-         */
-        // value_type char2integer( char );
-
-        /**
-         * @brief Identifies whether the char is a operand
-         * 
-         * @return true If it is
-         * @return false if it isn't 
-         */
-        // bool is_operand( const char );
-
         /**
          * @brief Identifies whether the char is a operator
          * 

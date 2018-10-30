@@ -73,6 +73,7 @@ std::vector <symbol> infix2postfix::infix_to_postfix( std::vector <symbol> infix
     for(auto i : infix){
         std::cout << i << " ";
     }
+    std::cout << std::endl;
     // --------------------------------------------------------------
     std::vector <symbol> postfix; //!< Conversion result
     std::stack< symbol > s; //!< Stack for help on conversion
