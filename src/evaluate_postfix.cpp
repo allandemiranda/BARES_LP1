@@ -18,21 +18,20 @@
 #include <vector>    //!< std::vector
 
 #include "../include/evaluate_postfix.h" //!< Class way
-#include "../include/token.h" //!< Class way
 
-value_type evaluate_postfix::char2integer( char c ){ 
-    return (c - '0'); 
-}
+// value_type evaluate_postfix::char2integer( char c ){ 
+//      return (c - '0'); 
+// }
 
-bool evaluate_postfix::is_operand( symbol s ){   
-    return ((s >= '0') and (s <= '9'));   
-}
+// bool evaluate_postfix::is_operand( const char s ){   
+//     return ((s >= '0') and (s <= '9'));   
+// }
 
-bool evaluate_postfix::is_operator( symbol s ){
+bool evaluate_postfix::is_operator( std::string s ){
     return std::string("*^/%+-").find( s ) != std::string::npos;
 }
 
-std::string evaluate_postfix::execute_operator( value_type v1, value_type v2, symbol op ){
+std::string evaluate_postfix::execute_operator( value_type v1, value_type v2, const char op ){
     switch( op )
     {
         case '^':  return std::to_string(pow( v1,v2 ));
@@ -51,13 +50,13 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
     std::stack< value_type > s;
 
     for( symbol c : postfix ){
-        if(c.type() == Token::token_t::OPERAND){
-            s.push( char2integer( c.value() ) );
+        if(c.type == Token::token_t::OPERAND){
+            s.push(  stoi(c.value) );
         } else {
-            if ( is_operator( c.value() ) ){
+            if ( is_operator( c.value ) ){
                 value_type op2 = s.top(); s.pop();
                 value_type op1 = s.top(); s.pop();
-                auto result = execute_operator( op1, op2, c ); // ( 2, 9, '*' )
+                auto result = execute_operator( op1, op2, c.value ); // ( 2, 9, '*' )
                 if(result == ( "Division by zero!" )){
                     return result;
                 }

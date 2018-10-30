@@ -13,11 +13,12 @@
  * @brief Aliase's and Include's
  * 
  */
-using value_type = long int;    //!< Type we operate on.
-using symbol = Token;           //!< A symbol in this implementation is just a token.
-
 #include <string> //!< std::string
 #include <vector> //!< std::vector
+#include "../include/token.h" //!< Class way
+
+using value_type = long int;    //!< Type we operate on.
+using symbol = Token;           //!< A symbol in this implementation is just a token.
 
 /**
  * @brief Class for infix expression to postfix
@@ -34,36 +35,36 @@ class infix2postfix{
 
     private:        
         /**
-         * @brief Identifies whether the symbol is a operator
+         * @brief Identifies whether the char is a operator
          * 
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_operator( symbol );
+        bool is_operator( const char );
+
+        // /**
+        //  * @brief Identifies whether the char is a operand
+        //  * 
+        //  * @return true If it is
+        //  * @return false if it isn't 
+        //  */
+        // bool is_operand( char );
 
         /**
-         * @brief Identifies whether the symbol is a operand
+         * @brief Identifies whether the char is a opening scope
          * 
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_operand( symbol );
+        bool is_opening_scope( const char );
 
         /**
-         * @brief Identifies whether the symbol is a opening scope
-         * 
-         * @return true If it is
-         * @return false if it isn't 
-         */
-        bool is_opening_scope( symbol );
-
-        /**
-         * @brief Identifies whether the symbol is a closing scope
+         * @brief Identifies whether the char is a closing scope
          * 
          * @return true If it is
          * @return false if it isn't
          */
-        bool is_closing_scope( symbol );
+        bool is_closing_scope( const char );
 
         /**
          * @brief Check the operand's type of association
@@ -71,21 +72,21 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't
          */
-        bool is_right_association( symbol );
+        bool is_right_association( const char );
 
         /**
          * @brief Converts a char (1-digit operand) into an integer
          * 
          * @return value_type The converted
          */
-        value_type char2integer( char );
+        // value_type char2integer( char );
 
         /**
          * @brief Get the precedence object
          * 
          * @return short The precedence value (number) associated with an operator
          */
-        short get_precedence( symbol );
+        short get_precedence( const char );
 
         /**
          * @brief Determines whether the first operator is >= than the second operator
@@ -93,7 +94,7 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't
          */
-        bool has_higher_or_eq_precedence( symbol , symbol );        
+        bool has_higher_or_eq_precedence( const char , const char );        
 };
 
 #endif

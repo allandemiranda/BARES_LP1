@@ -13,10 +13,11 @@
  * @brief Aliase's and Include's
  * 
  */
+#include <string> //!< std::string.
+#include "../include/token.h" //!< Class way
+
 using value_type = long int;    //!< Type we operate on.
 using symbol = Token;           //!< A symbol in this implementation is just a token.
-
-#include <string> //!< std::string.
 
 class evaluate_postfix
 {
@@ -36,30 +37,30 @@ class evaluate_postfix
          * 
          * @return value_type The converted
          */
-        value_type char2integer( char );
+        // value_type char2integer( char );
 
         /**
-         * @brief Identifies whether the symbol is a operand
+         * @brief Identifies whether the char is a operand
          * 
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_operand( symbol );
+        // bool is_operand( const char );
 
         /**
-         * @brief Identifies whether the symbol is a operator
+         * @brief Identifies whether the char is a operator
          * 
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_operator( symbol );
+        bool is_operator( std::string );
 
         /**
          * @brief Execute the binary operator on two operands and return the result
          * 
          * @return value_type The result
          */
-        std::string execute_operator( value_type, value_type, symbol);  
+        std::string execute_operator( value_type, value_type, const char);  
 };
 
 #endif

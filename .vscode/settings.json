@@ -34,6 +34,12 @@
         "cstddef": "cpp",
         "iomanip": "cpp",
         "string": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "deque": "cpp",
+        "cstdarg": "cpp",
+        "ctime": "cpp",
+        "functional": "cpp",
+        "numeric": "cpp",
+        "cinttypes": "cpp"
     }
 }
