@@ -30,6 +30,8 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "cstddef": "cpp",
+        "iomanip": "cpp"
     }
 }

@@ -23,11 +23,11 @@ using symbol = char;            //!< A symbol in this implementation is just a c
 #include "../include/evaluate_postfix.h" //!< Class way
 
 value_type evaluate_postfix::char2integer( char c ){ 
-    return c - '0'; 
+    return (c - '0'); 
 }
 
 bool evaluate_postfix::is_operand( symbol s ){   
-    return s >= '0' and s <= '9';   
+    return ((s >= '0') and (s <= '9'));   
 }
 
 bool evaluate_postfix::is_operator( symbol s ){

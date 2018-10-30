@@ -79,8 +79,7 @@ bool infix2postfix::has_higher_or_eq_precedence( symbol op1 , symbol op2 ){
     }
 }
 
-std::string infix2postfix::infix_to_postfix( std::string infix )
-{
+std::string infix2postfix::infix_to_postfix( std::string infix ){
     std::string postfix(""); //!< Conversion result
     std::stack< symbol > s; //!< Stack for help on conversion
     //!< Scroll through the entry, to process each item / token / character

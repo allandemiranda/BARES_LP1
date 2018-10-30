@@ -52,7 +52,7 @@ class evaluate_postfix
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_operator( symbol s );
+        bool is_operator( symbol );
 
         /**
          * @brief Execute the binary operator on two operands and return the result
