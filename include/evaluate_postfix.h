@@ -33,6 +33,14 @@ class evaluate_postfix
         
     private:
         /**
+         * @brief The limiter of range
+         * 
+         * @return true If is on limit
+         * @return false Over
+         */
+        bool limiting_total (value_type);
+
+        /**
          * @brief Identifies whether the char is a operator
          * 
          * @return true If it is

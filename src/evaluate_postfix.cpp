@@ -26,15 +26,29 @@ bool evaluate_postfix::is_operator( std::string s ){
 std::string evaluate_postfix::execute_operator( value_type v1, value_type v2, const char op ){
     switch( op )
     {
-        case '^':  return std::to_string(pow( v1,v2 ));
-        case '*':  return std::to_string(v1*v2);
-        case '/':  if ( v2 == 0 ) return ( "Division by zero!" );
-                   return std::to_string(v1/v2);
-        case '%':  if ( v2 == 0 ) return ( "Division by zero!" );
-                   return std::to_string(v1%v2);
-        case '+':  return std::to_string(v1+v2);
-        case '-':  return std::to_string(v1-v2);
-        default:   throw std::runtime_error( "ERRO FATAL" );
+        case '^':   if (!limiting_total(pow( v1,v2 ))) return ( "Numeric overflow error!" );
+                    return std::to_string(pow( v1,v2 ));
+        case '*':   if (!limiting_total(v1*v2)) return ( "Numeric overflow error!" );
+                    return std::to_string(v1*v2);
+        case '/':   if ( v2 == 0 ) return ( "Division by zero!" );
+                    if (!limiting_total(v1/v2)) return ( "Numeric overflow error!" );
+                    return std::to_string(v1/v2);
+        case '%':   if ( v2 == 0 ) return ( "Division by zero!" );
+                    if (!limiting_total(v1%v2)) return ( "Numeric overflow error!" );
+                    return std::to_string(v1%v2);
+        case '+':   if (!limiting_total(v1+v2)) return ( "Numeric overflow error!" );
+                    return std::to_string(v1+v2);
+        case '-':   if (!limiting_total(v1-v2)) return ( "Numeric overflow error!" );
+                    return std::to_string(v1-v2);
+        default:    throw std::runtime_error( "ERRO FATAL" );
+    }
+}
+
+bool evaluate_postfix::limiting_total (value_type number){
+    if((number > 32767) or (number < -32767)){
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -43,13 +57,13 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
     
     for( symbol c : postfix ){
         if(c.type == Token::token_t::OPERAND){
-            s.push(  stoll(c.value) );
+            s.push( stoll(c.value) );
         } else {
             if ( is_operator( c.value ) ){
                 value_type op2 = s.top(); s.pop();
                 value_type op1 = s.top(); s.pop();
                 auto result = execute_operator( op1, op2, c.value[0] ); // ( 2, 9, '*' )
-                if(result == ( "Division by zero!" )){
+                if((result == ( "Division by zero!" )) or (result == ( "Numeric overflow error!" ))){
                     return result;
                 }
                 s.push( stoll(result) );
@@ -61,7 +75,7 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
 
     //!< Cheking if have numeric overflow
     value_type total = s.top();
-    if((total > 32767) or (total < -32767)){
+    if(!limiting_total(total)){
         return ( "Numeric overflow error!" );
     }
 

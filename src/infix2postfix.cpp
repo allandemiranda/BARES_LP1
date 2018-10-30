@@ -69,12 +69,6 @@ bool infix2postfix::has_higher_or_eq_precedence( char op1 , char op2 ){
 }
 
 std::vector <symbol> infix2postfix::infix_to_postfix( std::vector <symbol> infix ){
-    // COMENTADO PARA DEPURAR
-    for(auto i : infix){
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-    // --------------------------------------------------------------
     std::vector <symbol> postfix; //!< Conversion result
     std::stack< symbol > s; //!< Stack for help on conversion
     //!< Scroll through the entry, to process each item / token / character
@@ -112,7 +106,10 @@ std::vector <symbol> infix2postfix::infix_to_postfix( std::vector <symbol> infix
     }
 
     //!< Unload the pending battery operations
-    postfix.push_back(Token(s.top().value,Token::token_t::OPERATOR));
+    while(!s.empty()){      
+        postfix.push_back(Token(s.top().value,Token::token_t::OPERATOR));
+        s.pop();
+    }
 
     return postfix;
 }

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <fstream> 
+//#include <fstream> 
 
 #include "../include/parser.h" 
 #include "../include/infix2postfix.h" 
@@ -29,25 +29,25 @@ void print_error_msg( const Parser::ResultType & result )
     switch ( result.type )
     {
         case Parser::ResultType::UNEXPECTED_END_OF_EXPRESSION:
-            std::cout << " Unexpected end of expression at column (" << result.at_col << ")!\n";
+            std::cout << "Unexpected end of expression at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::ILL_FORMED_INTEGER:
-            std::cout << " Ill formed integer at column (" << result.at_col << ")!\n";
+            std::cout << "Ill formed integer at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::MISSING_TERM:
-            std::cout << " Missing <term> at column (" << result.at_col << ")!\n";
+            std::cout << "Missing <term> at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::MISSING_CLOSING_LAST:
-            std::cout << " Missing closing ”)”at column (" << result.at_col << ")!\n";
+            std::cout << "Missing closing ”)”at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
-            std::cout << " Extraneous symbol after valid expression found at column (" << result.at_col << ")!\n";
+            std::cout << "Extraneous symbol after valid expression found at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::INTEGER_OUT_OF_RANGE:
-            std::cout << " Integer constant out of range beginning at column (" << result.at_col << ")!\n";
+            std::cout << "Integer constant out of range beginning at column (" << result.at_col << ")!\n";
             break;
         default:
-            std::cout << " Unhandled error found!\n";
+            std::cout << "Unhandled error found!\n";
             break;
     }    
 }
@@ -69,14 +69,24 @@ int main(int argc, char const *argv[])
     for( const auto & expr : expressions )
     {
         auto result = my_parser.parse( expr );
-        std::cout << std::setw(20) <<  std::left << expr;
-        if ( result.type != Parser::ResultType::OK )
+        if ( result.type != Parser::ResultType::OK ){
             print_error_msg(result);
-        else{            
-            auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
-            //auto result = gerar_resultado.evaluate_to_postfix( postfix );
-            //std::cout << " " << result;
+        } else {      
+            std::cout << "$$$" << std::endl;
+            for(auto i : my_parser.get_tokens()){
+                std::cout << i << " ";
+            }
             std::cout << std::endl;
+            std::cout << "$$$" << std::endl;      
+            auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
+            std::cout << "&&&" << std::endl;
+            for(auto i : postfix){
+                std::cout << i << " ";
+            }
+            std::cout << std::endl;
+            std::cout << "&&&" << std::endl;
+            auto result = gerar_resultado.evaluate_to_postfix( postfix );
+            std::cout << result << std::endl;
         }    
     }
 
