@@ -85,28 +85,28 @@ std::vector <symbol> infix2postfix::infix_to_postfix( std::vector <symbol> infix
         if(c.type == Token::token_t::OPERAND){
             postfix += c.value;
         } else {
-            if( is_opening_scope(c.value)){
-                s.push( c.value ); //!< '(' enters the waiting stack on top of
+            if( is_opening_scope(c.value[0])){
+                s.push( Token(c.value, Token::token_t::CLOSING) ); //!< '(' enters the waiting stack on top of
             } else {
-                if( is_closing_scope(c.value ){
+                if( is_closing_scope(c.value[0] )){
                     //!< Unpack to find the corresponding opening scope
-                    while( not is_opening_scope( s.top() ) ){
-                        postfix += s.top();
+                    while( not is_opening_scope( s.top().value[0] ) ){
+                        postfix += s.top().value;
                         s.pop();
                     }
                     s.pop(); //!< Remember to discard the '(' which is at the top of the stack
                 } else {
-                    if ( is_operator( c.value ) ){ 
+                    if ( is_operator( c.value[0] ) ){ 
                         //!< + - ^ *...        
                         //!< Perform waiting operations that are equal to or greater than
                         //!< in priority (except for the right-left association)
-                        while( not s.empty() and has_higher_or_eq_precedence( s.top(), c.value ) ){ 
+                        while( not s.empty() and has_higher_or_eq_precedence( s.top().value[0], c.value[0] ) ){ 
                             //!< s.top() >= c
-                            postfix += s.top();
+                            postfix += s.top().value;
                             s.pop();
                         }
                         //!< The operation that arrives, always has to wait
-                        s.push( c.value );
+                        s.push( Token(c.value, Token::token_t::OPERATOR) );
                      }
                 }
             }
@@ -118,12 +118,12 @@ std::vector <symbol> infix2postfix::infix_to_postfix( std::vector <symbol> infix
     while( not s.empty() ){
         symbol auxi = s.top();
         if(auxi.type == Token::token_t::OPERAND){
-            temp.push_back(auxi.value, Token::token_t::OPERAND);
+            temp.push_back(Token(auxi.value, Token::token_t::OPERAND));
         } else {
             if(auxi.type == Token::token_t::OPERATOR){
-                temp.push_back(auxi.value, Token::token_t::OPERATOR);
+                temp.push_back(Token(auxi.value, Token::token_t::OPERATOR));
             } else {
-                temp.push_back(auxi.value, Token::token_t::CLOSING);
+                temp.push_back(Token(auxi.value, Token::token_t::CLOSING));
             }
         }
         s.pop();

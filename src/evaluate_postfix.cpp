@@ -56,7 +56,7 @@ std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix 
             if ( is_operator( c.value ) ){
                 value_type op2 = s.top(); s.pop();
                 value_type op1 = s.top(); s.pop();
-                auto result = execute_operator( op1, op2, c.value ); // ( 2, 9, '*' )
+                auto result = execute_operator( op1, op2, c.value[0] ); // ( 2, 9, '*' )
                 if(result == ( "Division by zero!" )){
                     return result;
                 }
