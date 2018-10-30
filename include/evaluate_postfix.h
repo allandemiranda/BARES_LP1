@@ -14,7 +14,7 @@
  * 
  */
 using value_type = long int;    //!< Type we operate on.
-using symbol = char;            //!< A symbol in this implementation is just a char.
+using symbol = Token;           //!< A symbol in this implementation is just a token.
 
 #include <string> //!< std::string.
 
@@ -26,7 +26,7 @@ class evaluate_postfix
          * 
          * @return value_type The total
          */
-        std::string evaluate_to_postfix( std::string );
+        std::string evaluate_to_postfix( std::vector <symbol> );
         
     private:
         /// Converts a char (1-digit operand) into an integer.

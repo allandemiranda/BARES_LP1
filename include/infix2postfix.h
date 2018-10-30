@@ -14,9 +14,10 @@
  * 
  */
 using value_type = long int;    //!< Type we operate on.
-using symbol = char;            //!< A symbol in this implementation is just a char.
+using symbol = Token;           //!< A symbol in this implementation is just a token.
 
 #include <string> //!< std::string
+#include <vector> //!< std::vector
 
 /**
  * @brief Class for infix expression to postfix
@@ -27,9 +28,9 @@ class infix2postfix{
         /**
          * @brief To do the conversion
          * 
-         * @return std::string String converted
+         * @return std::vector String converted
          */
-        std::string infix_to_postfix(std::string); 
+        std::vector <symbol> infix_to_postfix(std::vector <symbol>); 
 
     private:        
         /**
