@@ -20,41 +20,6 @@
 #include "../include/evaluate_postfix.h" 
 
 /**
- * @brief Capture mathematical expressions
- * 
- * @param fileName File name
- * @param expressions Where will the expressions be saved
- * @return true If all goes well
- * @return false If something not happens well
- */
-bool catch_express(const char * fileName, std::vector <std::string> &expressions){
-    std::string route = "../data/"; //!< Begin route
-    route = route + fileName; //!< Complete route
-    std::ifstream ifs(route); //!< Open Route
-    if(!ifs.good()){
-        return false;
-    }
-    std::string valuer;
-    while( ifs >> valuer ){
-        expressions.push_back(valuer);
-    }
-    if( not ifs.eof() )
-        return false;
-	ifs.close();
-    return true;
-}
-
-// std::vector< std::vector <std::string> > exps 
-//     {
-//         {"20","+","1"},
-//         {"4","/","(","5","^","2",")","+","1"},
-//         {"1","+","3","*","(","4","+","8","*","3","^","7",")"},
-//         {"2","*","2","*","3"},
-//         {"7","/","0"},
-//         {"2","^","2","^","3"}
-//     };
-
-/**
  * @brief Print erro msg
  * 
  * @param result The erro name
@@ -87,14 +52,10 @@ void print_error_msg( const Parser::ResultType & result )
     }    
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
     //!< Capture mathematical expressions
     std::vector < std::string > expressions;
-    // if(!catch_express(argv[1],expressions)){
-    //     std::cout << "ERRO AO LER O ARQUIVO !" << std::endl;
-    //     return EXIT_FAILURE;
-    // }
     std::string str;
     while( getline( std::cin, str) )
     {

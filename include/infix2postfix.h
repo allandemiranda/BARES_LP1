@@ -15,6 +15,7 @@
  */
 #include <string> //!< std::string
 #include <vector> //!< std::vector
+
 #include "../include/token.h" //!< Class way
 
 using value_type = long int;    //!< Type we operate on.
@@ -40,15 +41,7 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_operator( const char );
-
-        // /**
-        //  * @brief Identifies whether the char is a operand
-        //  * 
-        //  * @return true If it is
-        //  * @return false if it isn't 
-        //  */
-        // bool is_operand( char );
+        bool is_operator( char );
 
         /**
          * @brief Identifies whether the char is a opening scope
@@ -56,7 +49,7 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't 
          */
-        bool is_opening_scope( const char );
+        bool is_opening_scope( char );
 
         /**
          * @brief Identifies whether the char is a closing scope
@@ -64,7 +57,7 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't
          */
-        bool is_closing_scope( const char );
+        bool is_closing_scope( char );
 
         /**
          * @brief Check the operand's type of association
@@ -72,21 +65,14 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't
          */
-        bool is_right_association( const char );
-
-        /**
-         * @brief Converts a char (1-digit operand) into an integer
-         * 
-         * @return value_type The converted
-         */
-        // value_type char2integer( char );
+        bool is_right_association( char );
 
         /**
          * @brief Get the precedence object
          * 
          * @return short The precedence value (number) associated with an operator
          */
-        short get_precedence( const char );
+        short get_precedence( char );
 
         /**
          * @brief Determines whether the first operator is >= than the second operator
@@ -94,7 +80,7 @@ class infix2postfix{
          * @return true If it is
          * @return false if it isn't
          */
-        bool has_higher_or_eq_precedence( const char , const char );        
+        bool has_higher_or_eq_precedence( char , char );        
 };
 
 #endif

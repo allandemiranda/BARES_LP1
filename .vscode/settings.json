@@ -41,5 +41,17 @@
         "functional": "cpp",
         "numeric": "cpp",
         "cinttypes": "cpp"
-    }
+    },
+    "doxdocgen.file.fileOrder": [
+        "file",
+        "author",
+        "brief",
+        "version",
+        "date",
+        "empty",
+        "custom"
+    ],
+    "doxdocgen.generic.dateFormat": "DD-MM-YYYY",
+    "doxdocgen.generic.authorEmail": "allandemiranda@gmail.com josoeclaudiox@gmail.com",
+    "doxdocgen.generic.authorName": "Allan de Miranda - Josoé Cláudio"
 }

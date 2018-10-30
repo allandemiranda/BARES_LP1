@@ -19,14 +19,6 @@
 
 #include "../include/evaluate_postfix.h" //!< Class way
 
-// value_type evaluate_postfix::char2integer( char c ){ 
-//      return (c - '0'); 
-// }
-
-// bool evaluate_postfix::is_operand( const char s ){   
-//     return ((s >= '0') and (s <= '9'));   
-// }
-
 bool evaluate_postfix::is_operator( std::string s ){
     return std::string("*^/%+-").find( s ) != std::string::npos;
 }
@@ -48,7 +40,7 @@ std::string evaluate_postfix::execute_operator( value_type v1, value_type v2, co
 
 std::string evaluate_postfix::evaluate_to_postfix( std::vector <symbol> postfix ){
     std::stack< value_type > s;
-
+    
     for( symbol c : postfix ){
         if(c.type == Token::token_t::OPERAND){
             s.push(  stoi(c.value) );

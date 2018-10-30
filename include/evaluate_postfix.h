@@ -14,6 +14,7 @@
  * 
  */
 #include <string> //!< std::string.
+
 #include "../include/token.h" //!< Class way
 
 using value_type = long int;    //!< Type we operate on.
