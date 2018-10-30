@@ -6,40 +6,49 @@
  * @date 25-10-2018
  */
 
+/**
+ * @brief Include's
+ * 
+ */
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <fstream> 
 
 #include "../include/parser.h" 
-
-// Class's criadas por Allan
 #include "../include/infix2postfix.h" 
 #include "../include/evaluate_postfix.h" 
 
-// FAZER A PARTE QUE LER O ARQUIVO
-std::vector < std::string > expressions = 
-{
-    "1 - 2",
-    "2+",
-    "3 * d",
-    "2 = 3",
-    "2.3 + 4",
-    "2 * 3 4",
-    "2 ** 3",
-    "%5 * 10",
-    "*5 * 10",
-    "(2+3)*/(1-4)",
-    "(-3*4)(10*5)",
-    "2 - 4)",
-    "2) - 4",
-    ")2 - 4",
-    "((2%3) * 8",
-    "3/(1-1)",
-    "10/(3*3^-2)",
-    "20*20000"
-};
+/**
+ * @brief Capture mathematical expressions
+ * 
+ * @param fileName File name
+ * @param expressions Where will the expressions be saved
+ * @return true If all goes well
+ * @return false If something not happens well
+ */
+bool catch_express(const char * fileName, std::vector <std::string> &expressions){
+    std::string route = "../data/"; //!< Begin route
+    route = route + fileName; //!< Complete route
+    std::ifstream ifs(route); //!< Open Route
+    if(!ifs.good()){
+        return false;
+    }
+    std::string valuer;
+    while( ifs >> valuer ){
+        expressions.push_back(valuer);
+    }
+    if( not ifs.eof() )
+        return false;
+	ifs.close();
+    return true;
+}
 
-
+/**
+ * @brief Print erro msg
+ * 
+ * @param result The erro name
+ */
 void print_error_msg( const Parser::ResultType & result )
 {    
     switch ( result.type )
@@ -68,9 +77,16 @@ void print_error_msg( const Parser::ResultType & result )
     }    
 }
 
-
-int main(void)
+int main(int argc, char const *argv[])
 {
+    //!< Capture mathematical expressions
+    std::vector < std::string > expressions;
+    if(!catch_express(argv[1],expressions)){
+        std::cout << "ERRO AO LER O ARQUIVO !" << std::endl;
+        return EXIT_FAILURE;
+    }
+    
+    //!< Start of operations
     Parser my_parser; 
     infix2postfix expressao_incial;
     evaluate_postfix gerar_resultado;
@@ -80,8 +96,7 @@ int main(void)
         std::cout << std::setw(20) <<  std::left << expr;
         if ( result.type != Parser::ResultType::OK )
             print_error_msg(result);
-        else
-        {            
+        else{            
             auto postfix = expressao_incial.infix_to_postfix( expr );
             auto result = gerar_resultado.evaluate_to_postfix( postfix );
             std::cout << " " << result << std::endl;
