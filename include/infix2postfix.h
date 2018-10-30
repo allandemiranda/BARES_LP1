@@ -16,7 +16,8 @@
 using value_type = long int;    //!< Type we operate on.
 using symbol = char;            //!< A symbol in this implementation is just a char.
 
-#include <string> //!< std::string
+#include <string>    //!< std::string
+#include <stack>     //!< stack
 
 /**
  * @brief Class for infix expression to postfix
@@ -31,7 +32,19 @@ class infix2postfix{
          */
         std::string infix_to_postfix(std::string); 
 
-    private:        
+        symbol top_and_pop_postfix_numbers(void){
+            symbol c = postfix_numbers.top();
+            postfix_numbers.pop();
+            return c;
+        }
+
+        value_type size_postfix_numbers(void){
+            return postfix_numbers.size();
+        }
+
+    private:      
+        std::stack< symbol > postfix_numbers; //!< POstfix Numbers
+
         /**
          * @brief Identifies whether the symbol is a operator
          * 
