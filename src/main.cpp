@@ -71,20 +71,8 @@ int main(int argc, char const *argv[])
         auto result = my_parser.parse( expr );
         if ( result.type != Parser::ResultType::OK ){
             print_error_msg(result);
-        } else {      
-            std::cout << "$$$" << std::endl;
-            for(auto i : my_parser.get_tokens()){
-                std::cout << i << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "$$$" << std::endl;      
-            auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
-            std::cout << "&&&" << std::endl;
-            for(auto i : postfix){
-                std::cout << i << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "&&&" << std::endl;
+        } else {                      
+            auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );            
             auto result = gerar_resultado.evaluate_to_postfix( postfix );
             std::cout << result << std::endl;
         }    
