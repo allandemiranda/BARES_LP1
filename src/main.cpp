@@ -11,6 +11,8 @@
 #include <vector>
 
 #include "../include/parser.h" 
+
+// Class's criadas por Allan
 #include "../include/infix2postfix.h" 
 #include "../include/evaluate_postfix.h" 
 

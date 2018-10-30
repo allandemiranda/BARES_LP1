@@ -34,22 +34,22 @@ bool evaluate_postfix::is_operator( symbol s ){
     return std::string("*^/%+-").find( s ) != std::string::npos;
 }
 
-value_type evaluate_postfix::execute_operator( value_type v1, value_type v2, symbol op ){
+std::string evaluate_postfix::execute_operator( value_type v1, value_type v2, symbol op ){
     switch( op )
     {
-        case '^':  return pow( v1,v2 );
-        case '*':  return v1*v2;
-        case '/':  if ( v2 == 0 ) throw std::runtime_error( "Division by zero!" );
-                   return v1/v2;
-        case '%':  if ( v2 == 0 ) throw std::runtime_error( "Division by zero!" );
-                   return v1%v2;
-        case '+': return v1+v2;
-        case '-': return v1-v2;
-        default: throw std::runtime_error( "ERRO FATAL" );
+        case '^':  return std::to_string(pow( v1,v2 ));
+        case '*':  return std::to_string(v1*v2);
+        case '/':  if ( v2 == 0 ) return ( "Division by zero!" );
+                   return std::to_string(v1/v2);
+        case '%':  if ( v2 == 0 ) return ( "Division by zero!" );
+                   return std::to_string(v1%v2);
+        case '+':  return std::to_string(v1+v2);
+        case '-':  return std::to_string(v1-v2);
+        default:   throw std::runtime_error( "ERRO FATAL" );
     }
 }
 
-value_type evaluate_postfix::evaluate_to_postfix( std::string postfix ){
+std::string evaluate_postfix::evaluate_to_postfix( std::string postfix ){
     std::stack< value_type > s;
 
     for( auto c : postfix ){
@@ -60,7 +60,10 @@ value_type evaluate_postfix::evaluate_to_postfix( std::string postfix ){
                 value_type op2 = s.top(); s.pop();
                 value_type op1 = s.top(); s.pop();
                 auto result = execute_operator( op1, op2, c ); // ( 2, 9, '*' )
-                s.push( result );
+                if(result == ( "Division by zero!" )){
+                    return result;
+                }
+                s.push( stoi(result) );
             } else {
                 assert( false );
             }
@@ -70,8 +73,8 @@ value_type evaluate_postfix::evaluate_to_postfix( std::string postfix ){
     //!< Cheking if have numeric overflow
     long int total = s.top();
     if((total > 32767) or (total < -32767)){
-        throw std::runtime_error( "Numeric overflow error!" );
+        return ( "Numeric overflow error!" );
     }
 
-    return total;
+    return std::to_string(total);
 }

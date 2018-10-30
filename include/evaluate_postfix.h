@@ -26,7 +26,7 @@ class evaluate_postfix
          * 
          * @return value_type The total
          */
-        value_type evaluate_to_postfix( std::string );
+        std::string evaluate_to_postfix( std::string );
         
     private:
         /// Converts a char (1-digit operand) into an integer.
@@ -59,7 +59,7 @@ class evaluate_postfix
          * 
          * @return value_type The result
          */
-        value_type execute_operator( value_type, value_type, symbol);  
+        std::string execute_operator( value_type, value_type, symbol);  
 };
 
 #endif
