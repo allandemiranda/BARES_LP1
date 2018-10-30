@@ -13,11 +13,13 @@
  * @brief Aliase's and Include's
  * 
  */
-using value_type = long int;    //!< Type we operate on.
-using symbol = char;            //!< A symbol in this implementation is just a char.
+#include <string>    //!< std::string
+#include <vector>    // std::vector
+#include <stack>     // stack
 
-#include <string>    //!< std::string.
-#include <stack>     //!< stack
+using value_type = long int;    //!< Type we operate on.
+using symbol = std::string;     //!< A symbol in this implementation is just a char.r.
+
 
 class evaluate_postfix
 {
@@ -27,7 +29,7 @@ class evaluate_postfix
          * 
          * @return value_type The total
          */
-        std::string evaluate_to_postfix( infix2postfix & );
+        std::string evaluate_to_postfix( std::vector < symbol > );
         
     private:
         /// Converts a char (1-digit operand) into an integer.

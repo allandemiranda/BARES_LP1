@@ -17,22 +17,24 @@ int main( void )
 
 
     // A expression is a queue of sysmbols (chars).
-    std::vector< std::string > exps {
-        "20+1",
-        "4/(5^2)+1",
-        "1+ 3 * ( 4 + 8 * 3 ^7)",
-        "2*2*3",
-        "7/0",
-        "2^2^3"} ;
-
-    for ( const auto& e : exps )
+    std::vector< std::vector <std::string> > exps 
     {
-        auto postfix = expressao_incial.infix_to_postfix( e );
-        std::cout << ">>> Input (infix)    = " << e << "\n";
-        std::cout << ">>> Output (postfix) = " << postfix << "\n";
+        {"20","+","1"},
+        {"4","/","(","5","^","2",")","+","1"},
+        {"1","+","3","*","(","4","+","8","*","3","^","7",")"},
+        {"2","*","2","*","3"},
+        {"7","/","0"},
+        {"2","^","2","^","3"}
+    } ;
 
-        auto result = gerar_resultado.evaluate_to_postfix( postfix );
+    for ( auto i : exps )
+    {
+        
+        auto postfix = expressao_incial.infix_to_postfix( i );
+
+        auto result = gerar_resultado.evaluate_to_postfix( expressao_incial.return_vector_numbers() );
         std::cout << ">>> Result is: " << result << std::endl;
+        
     }
 
     std::cout << "\n>>> Normal exiting...\n";

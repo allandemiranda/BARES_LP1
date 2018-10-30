@@ -32,6 +32,8 @@
         "utility": "cpp",
         "iostream": "cpp",
         "cstddef": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "string": "cpp",
+        "stack": "cpp"
     }
 }
