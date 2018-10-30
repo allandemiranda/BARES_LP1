@@ -26,6 +26,9 @@ int main( void )
         {"2","*","2","*","3"},
         {"7","/","0"},
         {"2","^","2","^","3"}
+<<<<<<< HEAD
+    };
+=======
     } ;
     */
    std::vector< std::string > exps {
@@ -35,6 +38,7 @@ int main( void )
         "2*2*3",
         "7/0",
         "2^2^3"} ;
+>>>>>>> c59bcc4eb19c54ca5820d21e5f818c2222c286c7
 
     for ( const auto& e : exps )
     {

@@ -85,19 +85,10 @@ bool Parser::accept( terminal_symbol_t c_ )
     {
         next_symbol();
         
-        // if( )
         return true;
     }
-    // skip_closing();
     
-    // if( *(m_it_curr_symb) == '(' or *(m_it_curr_symb) == ')' )
-    // {
-    //     // skip_closing();
-    //     return true;
-    // }
-        
-    // else
-        return false;
+    return false;
 }
 
 bool Parser::d_accept( delimiter c_ )
@@ -108,7 +99,6 @@ bool Parser::d_accept( delimiter c_ )
     if ( not end_input() and d_lexer( *m_it_curr_symb ) == c_  )
     {
         next_symbol();
-        // skip_closing();
         return true;
     }
 
@@ -221,6 +211,10 @@ bool Parser::expression()
             {
                 m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
             }
+            // else
+            // {
+            //     m_result.type = ResultType::ILL_FORMED_INTEGER;
+            // }
         }
         else if ( accept( Parser::terminal_symbol_t::TS_TIMES ) )
         {
@@ -320,10 +314,11 @@ bool Parser::expression()
  */
 bool Parser::term()
 {
-    skip_ws();
+    // skip_ws();
     
     skip_u_minus();
 
+    skip_ws();
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( m_it_curr_symb );
     // std::cout << *m_it_curr_symb << std::endl;
@@ -361,7 +356,7 @@ bool Parser::term()
             if( (std::string("0123456789").find( *m_it_curr_symb ) == std::string::npos) )
             {
                 // std::cout << "entrou ";
-                skip_ws();
+                // skip_ws();
                 // std::cout << *m_it_curr_symb << std::endl;
 
                 if( *m_it_curr_symb == '(' )
@@ -387,13 +382,14 @@ bool Parser::term()
         else
         {
             // ++i;
+            skip_ws();
             if( m_result.type == ResultType::ILL_FORMED_INTEGER )
             {
                 return false;
                 m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
                     std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
             }
-            skip_ws();
+            // skip_ws();
             // std::cout << "entrou symbolo" << *m_it_curr_symb << std::endl;
 
             if( m_it_curr_symb == m_expr.begin() and (std::string("*/^%+").find( *m_it_curr_symb ) != std::string::npos) )

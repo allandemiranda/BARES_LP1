@@ -44,6 +44,16 @@ bool catch_express(const char * fileName, std::vector <std::string> &expressions
     return true;
 }
 
+// std::vector< std::vector <std::string> > exps 
+//     {
+//         {"20","+","1"},
+//         {"4","/","(","5","^","2",")","+","1"},
+//         {"1","+","3","*","(","4","+","8","*","3","^","7",")"},
+//         {"2","*","2","*","3"},
+//         {"7","/","0"},
+//         {"2","^","2","^","3"}
+//     };
+
 /**
  * @brief Print erro msg
  * 
@@ -77,13 +87,18 @@ void print_error_msg( const Parser::ResultType & result )
     }    
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
     //!< Capture mathematical expressions
     std::vector < std::string > expressions;
-    if(!catch_express(argv[1],expressions)){
-        std::cout << "ERRO AO LER O ARQUIVO !" << std::endl;
-        return EXIT_FAILURE;
+    // if(!catch_express(argv[1],expressions)){
+    //     std::cout << "ERRO AO LER O ARQUIVO !" << std::endl;
+    //     return EXIT_FAILURE;
+    // }
+    std::string str;
+    while( getline( std::cin, str) )
+    {
+        expressions.push_back(str);
     }
     
     //!< Start of operations
@@ -96,11 +111,11 @@ int main(int argc, char const *argv[])
         std::cout << std::setw(20) <<  std::left << expr;
         if ( result.type != Parser::ResultType::OK )
             print_error_msg(result);
-        else{            
-            auto postfix = expressao_incial.infix_to_postfix( expr );
-            auto result = gerar_resultado.evaluate_to_postfix( postfix );
-            std::cout << " " << result << std::endl;
-        }         
+        // else{            
+        //     auto postfix = expressao_incial.infix_to_postfix( expressions );
+        //     auto result = gerar_resultado.evaluate_to_postfix( postfix );
+        //     std::cout << " " << result << std::endl;
+        // }         
     }
 
     return EXIT_SUCCESS;
