@@ -132,7 +132,7 @@ void Parser::skip_u_minus()
 {
     minusCount = 0;
     
-    for ( /* empty */ ; not end_input() and *(m_it_curr_symb+1) == '-'; ++minusCount )
+    for ( /* empty */ ; not end_input() and *(m_it_curr_symb) == '-' and *(m_it_curr_symb+1) == '-'; ++minusCount )
     { 
         // m_it_curr_symb++;
         next_symbol();
@@ -194,7 +194,7 @@ bool Parser::expression()
     {
         m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
                                 std::distance( m_expr.begin(), m_it_curr_symb ) );
-        return false;
+        // return false;
     }
     closing_first_Count = 0;
     closing_last_Count = 0;
@@ -216,6 +216,7 @@ bool Parser::expression()
             if( minus != '-')
             {
                 m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
+                next_symbol();
             }
             // else
             // {
@@ -277,8 +278,21 @@ bool Parser::expression()
                 m_tk_list.emplace_back( Token( ")", Token::token_t::CLOSING ) );
                 ++closing_last_Count;
             }
+            
         }
         else break;
+
+        if( *m_it_curr_symb == ')' )
+        {
+            skip_ws();
+            if( *(m_it_curr_symb)+1 == '(' )
+            {
+                m_result = ResultType( ResultType::EXTRANEOUS_SYMBOL, 
+                            std::distance( m_expr.begin(), m_it_curr_symb ) );
+                return false;
+            }
+            
+        }
 
         if( end_input() and closing_last_Count < closing_first_Count )
         {
@@ -320,10 +334,8 @@ bool Parser::expression()
  */
 bool Parser::term()
 {
-    // skip_ws();
-    
+    skip_ws();
     skip_u_minus();
-
     skip_ws();
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( m_it_curr_symb );
@@ -359,11 +371,13 @@ bool Parser::term()
                 // Coloca o novo token na nossa lista de tokens.
                 m_tk_list.emplace_back( Token( token_str, Token::token_t::OPERAND ) );
             }
-            if( (std::string("0123456789").find( *m_it_curr_symb ) == std::string::npos) )
+        }
+        else
+        {
+            skip_ws();
+            
+            if( *m_it_curr_symb != m_expr.front() and (std::string("0123456789").find( *m_it_curr_symb ) == std::string::npos) )
             {
-                // std::cout << "entrou ";
-                // skip_ws();
-                // std::cout << *m_it_curr_symb << std::endl;
 
                 if( *m_it_curr_symb == '(' )
                 {
@@ -372,38 +386,11 @@ bool Parser::term()
                     return false;
                 }
             }
-            // if( std::string("*/^%+").find( *m_it_curr_symb-1 ) != std::string::npos and std::string("*/^%+").find( *m_it_curr_symb-2 ) != std::string::npos )
-            // {
-            //     m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 0 );
-            // }
-            // if( (std::string("0123456789 ").find( *m_it_curr_symb ) != std::string::npos) and (std::string("*/^%+").find( *(m_it_curr_symb-1) ) != std::string::npos) )
-            // {
-            //     m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
-            //         std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-            //         std::cout << "entrou" << std::endl;
-            //         return false;
-            // }
-            // std::cout << "entrou " << *m_it_curr_symb << std::endl;
-        }
-        else
-        {
-            // ++i;
-            skip_ws();
-            if( m_result.type == ResultType::ILL_FORMED_INTEGER )
-            {
-                return false;
-                m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
-                    std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-            }
-            // skip_ws();
-            // std::cout << "entrou symbolo" << *m_it_curr_symb << std::endl;
 
             if( m_it_curr_symb == m_expr.begin() and (std::string("*/^%+").find( *m_it_curr_symb ) != std::string::npos) )
             {
                 m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
                     std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-                    // std::cout << "entrou" << std::endl;
-                    return false;
             }
             // Create the corresponding error.
             
@@ -411,8 +398,6 @@ bool Parser::term()
             {
                 m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
                     std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-                    // std::cout << "entrou" << std::endl;
-                    return false;
             }
         }
     } 
@@ -438,19 +423,7 @@ bool Parser::integer()
         return true; // OK
     
     accept( terminal_symbol_t::TS_MINUS );
-    // if( (std::string("0123456789").find( *m_it_curr_symb ) != std::string::npos) )
-    //         {
-    //             std::cout << "entrou ";
-    //             skip_ws();
-    //             std::cout << *m_it_curr_symb << std::endl;
-
-    //             if( *(m_it_curr_symb-1) == '(' )
-    //             {
-    //                 m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
-    //                 std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-    //                 return false;
-    //             }
-    //         }
+    
     return natural_number();
 }
 

@@ -35,10 +35,10 @@ void print_error_msg( const Parser::ResultType & result )
             std::cout << "Ill formed integer at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::MISSING_TERM:
-            std::cout << "Missing <term> at column (" << result.at_col << ")!\n";
+            std::cout << "Missing <term> at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::MISSING_CLOSING_LAST:
-            std::cout << "Missing closing ”)”at column (" << result.at_col << ")!\n";
+            std::cout << "Missing closing ”)” at column (" << result.at_col << ")!\n";
             break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
             std::cout << "Extraneous symbol after valid expression found at column (" << result.at_col << ")!\n";
@@ -69,13 +69,19 @@ int main(int argc, char const *argv[])
     for( const auto & expr : expressions )
     {
         auto result = my_parser.parse( expr );
+        // for( auto i : my_parser.get_tokens() )
+        // {
+        //     std::cout << i << " ";
+        // }
+        // std::cout<<std::endl;
         if ( result.type != Parser::ResultType::OK ){
             print_error_msg(result);
-        } else {                      
+        }
+         else {                      
             auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );            
             auto result = gerar_resultado.evaluate_to_postfix( postfix );
             std::cout << result << std::endl;
-        }    
+        }
     }
 
     return EXIT_SUCCESS;
