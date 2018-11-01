@@ -37,7 +37,7 @@ void print_error_msg( const Parser::ResultType & result )
             std::cout << "Missing <term> at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::MISSING_CLOSING_LAST:
-            std::cout << "Missing closing ”)” at column (" << result.at_col+1 << ")!\n";
+            std::cout << "Missing closing" + ")" + " at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
             std::cout << "Extraneous symbol after valid expression found at column (" << result.at_col+1 << ")!\n";
@@ -69,21 +69,21 @@ int main(int argc, char const *argv[])
     {
         auto result = my_parser.parse( expr );  
         // Depudar expressao
-        std::cout << expr << " &&& ";
+        // std::cout << expr << " &&& ";
         // FIM
         if ( result.type != Parser::ResultType::OK ){
             print_error_msg(result);
         } else {  
             // Depurar token         
-            for(auto i : my_parser.get_tokens()){
-                std::cout << i << " ";
-            }  std::cout << " ### " ; 
-            // FIM        
+            // for(auto i : my_parser.get_tokens()){
+            //     std::cout << i << " ";
+            // }  std::cout << " ### " ; 
+            // // FIM        
             auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
             // Depurar converção para postfix
-            for(auto i : postfix){
-                std::cout << i << " ";
-            }             std::cout << " ### ";
+            // for(auto i : postfix){
+            //     std::cout << i << " ";
+            // }             std::cout << " ### ";
             // FIM
             auto result = gerar_resultado.evaluate_to_postfix( postfix );
             std::cout << result << std::endl;

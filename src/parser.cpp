@@ -339,7 +339,17 @@ bool Parser::term()
         m_result.at_col = std::distance( m_expr.begin(), m_it_curr_symb );
         return false;
     }
-    skip_u_minus();
+    if( *m_it_curr_symb == '-' and *(m_it_curr_symb+1) == '-') 
+        skip_u_minus();
+    else if( *m_it_curr_symb == '-' and *(m_it_curr_symb+1) == ' ' )
+    {
+        m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
+        // return true;                
+    }
+    else
+    {
+        minus = '+';
+    }
     
     skip_ws();
     
@@ -391,7 +401,11 @@ bool Parser::term()
         {
             skip_ws();
             
-
+            // if( *m_it_curr_symb == '-' )
+            // {
+            //     m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
+            //     return true;                
+            // }
             // if( *m_it_curr_symb != m_expr.front() and (std::string("0123456789").find( *m_it_curr_symb ) == std::string::npos) )
             // {
 
@@ -417,7 +431,8 @@ bool Parser::term()
             //         std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
             // }
         }
-    } 
+    }
+
      
     return m_result.type == ResultType::OK;
 }
