@@ -13,7 +13,6 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-//#include <fstream> 
 
 #include "../include/parser.h" 
 #include "../include/infix2postfix.h" 
@@ -68,12 +67,7 @@ int main(int argc, char const *argv[])
     evaluate_postfix gerar_resultado;
     for( const auto & expr : expressions )
     {
-        auto result = my_parser.parse( expr );
-        // for( auto i : my_parser.get_tokens() )
-        // {
-        //     std::cout << i << " ";
-        // }
-        // std::cout<<std::endl;
+        auto result = my_parser.parse( expr );        
         if ( result.type != Parser::ResultType::OK ){
             print_error_msg(result);
         }
