@@ -67,12 +67,24 @@ int main(int argc, char const *argv[])
     evaluate_postfix gerar_resultado;
     for( const auto & expr : expressions )
     {
-        auto result = my_parser.parse( expr );        
+        auto result = my_parser.parse( expr );  
+        // Depudar expressao
+        std::cout << expr << " &&& ";
+        // FIM
         if ( result.type != Parser::ResultType::OK ){
             print_error_msg(result);
-        }
-        else {                      
-            auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );            
+        } else {  
+            // Depurar token         
+            for(auto i : my_parser.get_tokens()){
+                std::cout << i << " ";
+            }  std::cout << " ### " ; 
+            // FIM        
+            auto postfix = expressao_incial.infix_to_postfix( my_parser.get_tokens() );
+            // Depurar converção para postfix
+            for(auto i : postfix){
+                std::cout << i << " ";
+            }             std::cout << " ### ";
+            // FIM
             auto result = gerar_resultado.evaluate_to_postfix( postfix );
             std::cout << result << std::endl;
         }
