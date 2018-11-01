@@ -37,7 +37,7 @@ void print_error_msg( const Parser::ResultType & result )
             std::cout << "Missing <term> at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::MISSING_CLOSING_LAST:
-            std::cout << "Missing closing" + ")" + " at column (" << result.at_col+1 << ")!\n";
+            std::cout << "Missing closing" "\)\"  at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
             std::cout << "Extraneous symbol after valid expression found at column (" << result.at_col+1 << ")!\n";
