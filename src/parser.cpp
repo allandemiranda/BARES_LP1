@@ -196,6 +196,7 @@ bool Parser::expression()
                                 std::distance( m_expr.begin(), m_it_curr_symb ) );
         // return false;
     }
+    
     closing_first_Count = 0;
     closing_last_Count = 0;
     // Process terms
@@ -216,7 +217,7 @@ bool Parser::expression()
             if( minus != '-')
             {
                 m_tk_list.emplace_back( Token( "-", Token::token_t::OPERATOR ) );
-                next_symbol();
+                // next_symbol();
             }
             // else
             // {
@@ -258,11 +259,13 @@ bool Parser::expression()
             //                     std::distance( m_expr.begin(), m_it_curr_symb ) );
             //     break;
             // }
-            else
-            {
+            
+            
+            // else
+            // {
                 m_tk_list.emplace_back( Token( "(", Token::token_t::CLOSING ) );
                 ++closing_first_Count;
-            }
+            // }
         }
         else if ( d_accept( Parser::delimiter::DE_CLOSING_LAST ) )
         {
@@ -273,26 +276,21 @@ bool Parser::expression()
                                 std::distance( m_expr.begin(), m_it_curr_symb ) );
                 break;
             }
-            else 
-            {
-                m_tk_list.emplace_back( Token( ")", Token::token_t::CLOSING ) );
-                ++closing_last_Count;
-            }
-            
-        }
-        else break;
-
-        if( *m_it_curr_symb == ')' )
-        {
             skip_ws();
-            if( *(m_it_curr_symb)+1 == '(' )
+            if( *(m_it_curr_symb) == '(' )
             {
                 m_result = ResultType( ResultType::EXTRANEOUS_SYMBOL, 
                             std::distance( m_expr.begin(), m_it_curr_symb ) );
                 return false;
-            }
+            } 
+            // else 
+            // {
+                m_tk_list.emplace_back( Token( ")", Token::token_t::CLOSING ) );
+                ++closing_last_Count;
+            // }
             
         }
+        else break;
 
         if( end_input() and closing_last_Count < closing_first_Count )
         {
@@ -335,8 +333,16 @@ bool Parser::expression()
 bool Parser::term()
 {
     skip_ws();
+    if( m_it_curr_symb == m_expr.begin() and (*m_it_curr_symb == '-' and *(m_it_curr_symb+1) == ' ') )
+    {
+        m_result.type = ResultType::ILL_FORMED_INTEGER;
+        m_result.at_col = std::distance( m_expr.begin(), m_it_curr_symb );
+        return false;
+    }
     skip_u_minus();
+    
     skip_ws();
+    
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( m_it_curr_symb );
     // std::cout << *m_it_curr_symb << std::endl;
@@ -345,6 +351,15 @@ bool Parser::term()
     {
         if ( integer() )
         {
+            /// erros do tipo 2 ( 2 + 2 )
+            ///                ^
+            skip_ws();
+            if( *(m_it_curr_symb) == '(' )
+            {
+                m_result = ResultType( ResultType::EXTRANEOUS_SYMBOL, 
+                                std::distance( m_expr.begin(), m_it_curr_symb ) );
+                                return false;
+            }
             // Copiar a substring correspondente para uma variável string.
             std::string token_str;
             std::copy( begin_token, m_it_curr_symb, std::back_inserter( token_str ) );
@@ -376,29 +391,31 @@ bool Parser::term()
         {
             skip_ws();
             
-            if( *m_it_curr_symb != m_expr.front() and (std::string("0123456789").find( *m_it_curr_symb ) == std::string::npos) )
-            {
 
-                if( *m_it_curr_symb == '(' )
-                {
-                    m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
-                    std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-                    return false;
-                }
-            }
+            // if( *m_it_curr_symb != m_expr.front() and (std::string("0123456789").find( *m_it_curr_symb ) == std::string::npos) )
+            // {
 
-            if( m_it_curr_symb == m_expr.begin() and (std::string("*/^%+").find( *m_it_curr_symb ) != std::string::npos) )
+            //     if( *m_it_curr_symb == '(' )
+            //     {
+            //         m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //         std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
+            //         return false;
+            //     }
+            // }
+
+            if( m_it_curr_symb == m_expr.begin() and (std::string("*/^%+-").find( *m_it_curr_symb ) != std::string::npos) )
             {
                 m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
                     std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
+                    return false;
             }
             // Create the corresponding error.
             
-            else if( (std::string("*/^%+").find( *m_it_curr_symb ) != std::string::npos) and (std::string("*/^%+").find( *(m_it_curr_symb-1) ) != std::string::npos) or (std::string("*/^%+").find( *(m_it_curr_symb+1) ) != std::string::npos) )
-            {
-                m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
-                    std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
-            }
+            // else if( (std::string("*/^%+").find( *m_it_curr_symb ) != std::string::npos) and (std::string("*/^%+").find( *(m_it_curr_symb-1) ) != std::string::npos) or (std::string("*/^%+").find( *(m_it_curr_symb+1) ) != std::string::npos) )
+            // {
+            //     m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
+            //         std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
+            // }
         }
     } 
      
@@ -509,13 +526,20 @@ Parser::ResultType Parser::parse( std::string e_ )
 
     // Let us ignore any leading white spaces.
     skip_ws();
-
+    
+    if ( m_it_curr_symb+1 == m_expr.end() ) // Premature end?
+    {
+        // Input has finished before we even started to parse...
+        
+            m_result =  ResultType( ResultType::UNEXPECTED_END_OF_EXPRESSION,
+                std::distance( m_expr.begin(), m_it_curr_symb+2 ) );
+    }
     if ( end_input() ) // Premature end?
     {
         // Input has finished before we even started to parse...
         
             m_result =  ResultType( ResultType::UNEXPECTED_END_OF_EXPRESSION,
-                std::distance( m_expr.begin(), m_it_curr_symb ) );
+                std::distance( m_expr.begin(), m_it_curr_symb+1 ) );
     }
     else
     {
@@ -524,8 +548,8 @@ Parser::ResultType Parser::parse( std::string e_ )
         {
             // At this point there should not be any non-whitespace character in the input expression.
             skip_ws(); // Anyway, let us clear any remaining 'whitespaces'.
-            
-            if( end_input() and closing_last_Count < closing_first_Count )
+
+            if( closing_last_Count < closing_first_Count )
             {
                 m_result = ResultType( ResultType::MISSING_CLOSING_LAST, std::distance( m_expr.begin(), m_it_curr_symb ) );
             }
