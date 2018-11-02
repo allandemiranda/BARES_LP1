@@ -1,13 +1,13 @@
 # Projeto BARES LP1
 
 Desenvolvido  por [Allan de Miranda](https://github.com/allandemiranda)
-                e [Josoé Cláudio](https://github.com/JO5U3)
+                e [Josué Cláudio](https://github.com/JO5U3)
 
 30 de outubro de 2018 - LP1 - IMD
 
 ## Introdução
 
-O projeto tem como intuito desenvolver uma calculadora utilizando as ferramentas e conhecimentos adquiridos durante a disciplina de Linguagem de Programação 1 do curso de Tecnologia da Informação da UFRN/IMD.
+O projeto tem como intuito desenvolver um avaliador de expressões aritméticas utilizando as ferramentas e conhecimentos adquiridos durante a disciplina de Linguagem de Programação 1 do curso de Tecnologia da Informação da UFRN/IMD.
 
 ## Instalação e execução
 
@@ -47,10 +47,10 @@ saida.txt -> `vim ./data/saida.txt`</br>
 `Numeric overflow error!    `</br>
 `300                        `</br>
 
-## Operações suportadas na calculadora
+## Operações suportadas
 
-Será suportado para esta verção:
+Será suportado para esta versão:
 
 - Números inteiros constantes de -32.768 a 32.767
-- Operadores +, −, /, ∗,ˆ e %
+- Operadores +, −, /, ∗, ˆ, %
 - Parênteses "(" e ")"
