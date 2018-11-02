@@ -194,7 +194,7 @@ bool Parser::expression()
     {
         m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
                                 std::distance( m_expr.begin(), m_it_curr_symb ) );
-        // return false;
+        return false;
     }
     
     closing_first_Count = 0;
@@ -303,6 +303,16 @@ bool Parser::expression()
             m_result =  ResultType( ResultType::ILL_FORMED_INTEGER, 
                     std::distance( m_expr.begin(), m_it_curr_symb ) ) ;
         }
+        // if( *m_it_curr_symb == ')' )
+        // {
+        //     skip_ws();
+        //     if( std::string("-0123456789").find(*m_it_curr_symb) != std::string::npos )
+        //     {
+        //         m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+        //                         std::distance( m_expr.begin(), m_it_curr_symb ) );
+        //         return false;
+        //     }
+        // }
         // After either "+-*/%^" we expect a valid term, otherwise we have a missing term.
         // However, we may get a "false" term() if we got a number out of range.
         // So, we only change the error code if this is not that case (out of range).
@@ -350,6 +360,34 @@ bool Parser::term()
     {
         minus = '+';
     }
+    // if( *m_it_curr_symb == ')' )
+    // {
+    //     skip_ws();
+    //     if( std::string("-0123456789").find(*m_it_curr_symb) != std::string::npos )
+    //     {
+    //         m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+    //                         std::distance( m_expr.begin(), m_it_curr_symb ) );
+    //         return false;
+    //     }
+    // }
+    if( std::string("*/%^+-(0123456789").find(*m_it_curr_symb) == std::string::npos )
+    {
+        // if( *m_it_curr_symb == ')' )
+        // {
+        //     skip_ws();
+        //     if( std::string("-0123456789").find(*m_it_curr_symb) != std::string::npos )
+        //     {
+        //         m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+        //                         std::distance( m_expr.begin(), m_it_curr_symb ) );
+        //         return false;
+        //     }
+        // }
+        skip_ws();
+        // if( std::string("-0123456789").find(*m_it_curr_symb) == std::string::npos )
+        m_result = ResultType( ResultType::ILL_FORMED_INTEGER, 
+                                std::distance( m_expr.begin(), m_it_curr_symb ) );
+        return false;
+    }
     
     skip_ws();
     
@@ -370,6 +408,7 @@ bool Parser::term()
                                 std::distance( m_expr.begin(), m_it_curr_symb ) );
                                 return false;
             }
+            
             // Copiar a substring correspondente para uma variável string.
             std::string token_str;
             std::copy( begin_token, m_it_curr_symb, std::back_inserter( token_str ) );
