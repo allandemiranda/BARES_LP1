@@ -1,8 +1,8 @@
 #ifndef _TOKEN_H_
 #define _TOKEN_H_
 
-#include <string>   // std::string
-#include <iostream> // std::ostream
+#include <string>   /// std::string
+#include <iostream> /// std::ostream
 
 /// Represents a token.
 /*!
@@ -17,8 +17,8 @@ struct Token
         enum class token_t : int
         {
             OPERAND = 0, //!< A type representing numbers.
-            OPERATOR,     //!< A type representing  "+", "-".
-            CLOSING //!< A type representing "(", ")".
+            OPERATOR,    //!< A type representing  "+", "-", "*", "/", "%", "^".
+            CLOSING      //!< A type representing "(", ")".
         };
 
         std::string value; //!< The token value as a string.

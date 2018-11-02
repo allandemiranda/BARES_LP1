@@ -32,7 +32,7 @@ Numeric overflow error!
 -28
 Integer constant out of range beginning at column (1)!
 Integer constant out of range beginning at column (13)!
-Integer constant out of range beginning at column (6)!
+Integer constant out of range beginning at column (4)!
 Integer constant out of range beginning at column (18)!
 Ill formed integer at column (1)!
 Missing <term> at column (4)!
@@ -52,9 +52,9 @@ Extraneous symbol after valid expression found at column (2)!
 Extraneous symbol after valid expression found at column (3)!
 Extraneous symbol after valid expression found at column (3)!
 Extraneous symbol after valid expression found at column (3)!
-Extraneous symbol after valid expression found at column (1)!
-Extraneous symbol after valid expression found at column (1)!
-Extraneous symbol after valid expression found at column (1)!
+Ill formed integer at column (1)!
+Ill formed integer at column (1)!
+Ill formed integer at column (1)!
 Extraneous symbol after valid expression found at column (7)!
 Extraneous symbol after valid expression found at column (7)!
 Extraneous symbol after valid expression found at column (7)!
@@ -63,17 +63,17 @@ Extraneous symbol after valid expression found at column (7)!
 Extraneous symbol after valid expression found at column (11)!
 Extraneous symbol after valid expression found at column (3)!
 299
-Extraneous symbol after valid expression found at column (2)!
-Extraneous symbol after valid expression found at column (5)!
-Extraneous symbol after valid expression found at column (8)!
-Extraneous symbol after valid expression found at column (10)!
-Missing closing ”)” at column (18)!
-Missing closing ”)” at column (21)!
-Missing closing ”)” at column (32)!
-Missing closing ”)” at column (34)!
-Missing closing ”)” at column (40)!
-Missing closing ”)” at column (46)!
-Missing closing ”)” at column (52)!
+Ill formed integer at column (1)!
+Extraneous symbol after valid expression found at column (4)!
+Ill formed integer at column (7)!
+Extraneous symbol after valid expression found at column (9)!
+Missing closing ")" at column (18)!
+Missing closing ")" at column (21)!
+Missing closing ")" at column (32)!
+Missing closing ")" at column (34)!
+Missing closing ")" at column (40)!
+Missing closing ")" at column (46)!
+Missing closing ")" at column (52)!
 -28
 24
 Division by zero!

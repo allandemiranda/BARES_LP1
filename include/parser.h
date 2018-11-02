@@ -1,16 +1,16 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
 
-#include <iostream> // cout, cin
-#include <iterator> // std::distance()
-#include <vector>   // std::vector
-#include <sstream>  // std::istringstream
-#include <cstddef>  // std::ptrdiff_t
-#include <limits>   // std::numeric_limits, para validar a faixa de um inteiro.
-#include <algorithm>// std::copy, para copiar substrings.
-#include <cctype>   // std::isspace()
+#include <iostream>  /// cout, cin
+#include <iterator>  /// std::distance()
+#include <vector>    /// std::vector
+#include <sstream>   /// std::istringstream
+#include <cstddef>   /// std::ptrdiff_t
+#include <limits>    /// std::numeric_limits, para validar a faixa de um inteiro.
+#include <algorithm> /// std::copy, para copiar substrings.
+#include <cctype>    /// std::isspace()
 
-#include "token.h"  // struct Token.
+#include "token.h"   /// struct Token.
 
 /// This class represents a parser that **validates** and **tokenizes** an expression.
 /*!
@@ -21,7 +21,7 @@
  *
  * The grammar is:
  * ```
- *   <expr>            := <term>,{ ("+"|"-"),<term> };
+ *   <expr>            := <term>,{ ("+"|"-"|"*"|"/"|"%"|"^"),<term> };
  *   <term>            := <integer>;
  *   <integer>         := "0" | ["-"],<natural_number>;
  *   <natural_number>  := <digit_excl_zero>,{<digit>};
@@ -53,7 +53,7 @@ class Parser
             code_t type;      //!< Error code.
             size_type at_col; //!< Stores the column number where the error happened.
 
-            /// Default contructor.
+            /// Default constructor.
             explicit ResultType( code_t type_=OK , size_type col_=0u )
                     : type{ type_ }
                     , at_col{ col_ }
@@ -69,7 +69,6 @@ class Parser
         ResultType parse( std::string e_ );
         /// Retrieves the list of tokens created during the partins process.
         std::vector< Token > get_tokens( void ) const;
-        bool is_ok_closing(); // para verificar se é possível inserir um closing first
 
         //==== Special methods
         /// Default constructor
@@ -77,33 +76,32 @@ class Parser
         /// Default destructor
         ~Parser() = default;
         /// Turn off copy constructor. We do not need it.
-        Parser( const Parser & ) = delete;  // Construtor cópia.
+        Parser( const Parser & ) = delete; /// Copy constructor
         /// Turn off assignment operator.
-        Parser & operator=( const Parser & ) = delete; // Atribuição.
+        Parser & operator=( const Parser & ) = delete; /// Assignment.
 
     private:
         /// Terminal symbols table
-        enum class terminal_symbol_t{  // The symbols:-
-            TS_PLUS,	        //!< code for "+"
-            TS_MINUS,	        //!< code for "-"
-            TS_TIMES,           //!< code for "*"
-            TS_DIVISION,         //!< code for "/"
-            TS_MODULUS,          //!< code for "%"   
-            TS_POWER,            //!< code for "^"
-            TS_ZERO,            //!< code for "0"
-            TS_NON_ZERO_DIGIT,  //!< code for digits, from "1" to "9"
-            TS_WS,              //!< code for a white-space
-            TS_TAB,             //!< code for tab
-            TS_EOS,             //!< code for "End Of String"
-            TS_INVALID	        //!< invalid token
+        enum class terminal_symbol_t{ /// The symbols:-
+            TS_PLUS,	              //!< code for "+"
+            TS_MINUS,	              //!< code for "-"
+            TS_TIMES,                 //!< code for "*"
+            TS_DIVISION,              //!< code for "/"
+            TS_MODULUS,               //!< code for "%"   
+            TS_POWER,                 //!< code for "^"
+            TS_ZERO,                  //!< code for "0"
+            TS_NON_ZERO_DIGIT,        //!< code for digits, from "1" to "9"
+            TS_WS,                    //!< code for a white-space
+            TS_TAB,                   //!< code for tab
+            TS_EOS,                   //!< code for "End Of String"
+            TS_INVALID	              //!< invalid token
         };
 
         enum class delimiter
         {
-            DE_CLOSING_FIRST,      //!< code for "("
-            DE_CLOSING_LAST,       //!< code for ")"
-            DE_EOS,             //!< code for "End Of String"
-            DE_INVALID	        //!< invalid token
+            DE_CLOSING_FIRST, //!< code for "("
+            DE_CLOSING_LAST,  //!< code for ")"
+            DE_INVALID	      //!< invalid token
         };
 
         //==== Private members.
@@ -111,38 +109,29 @@ class Parser
         std::string::iterator m_it_curr_symb; //!< Pointer to the current char inside the expression.
         std::vector< Token > m_tk_list; //!< Resulting list of tokens extracted from the expression.
         ResultType m_result; //!< The result for the current expression (either error of OK).
-        char minus; /// retorno da função skip_u_minus
-        unsigned short minusCount; /// contador de '-' unário
-        unsigned short closing_first_Count; /// contador de '('
-        unsigned short closing_last_Count; /// contador de ')'
+        char minus; /// skip_u_minus return
+        unsigned short minusCount; /// counter of unary '-' 
+        unsigned short closing_first_Count; /// counter of '('
+        unsigned short closing_last_Count; /// conter of ')'
 
         //=== Support methods.
-        terminal_symbol_t lexer( char c_ ) const;/// Get the corresponding code for a given input char.
-        delimiter d_lexer( char c_ ) const;
-        void next_symbol( void );                /// Advances iterator to the next char in the expression.
-        //bool peek( terminal_symbol_t c_ ) const; /// Peeks the current character.
+        terminal_symbol_t lexer( char c_ ) const; /// Get the corresponding code for a given input char.
+        delimiter d_lexer( char c_ ) const; 
+        void next_symbol( void ); /// Advances iterator to the next char in the expression.
         bool accept( terminal_symbol_t c_ ); /// Tries to accept the requested terminal symbols
-        bool d_accept( delimiter c_ );     /// Tries to accept the requested delimiter symbol.
-        //bool expect( terminal_symbol_t c_ );        /// Skips any WS/Tab and tries to accept the requested symbol.
-        void skip_ws( void );                   /// Skips any WS/Tab ans stops at the next character.
-        void skip_u_minus( void );              /// Skips any consecutive MINUS, stops at the next character and verify if the result is equal MINUS OR PLUS ( - or + ) and put the result in minus variable
+        bool d_accept( delimiter c_ ); /// Tries to accept the requested delimiter symbol.
+        void skip_ws( void ); /// Skips any WS/Tab ans stops at the next character.
+        void skip_u_minus( void ); /// Skips any consecutive '-', stops at the next character and verify if the result is equal MINUS OR PLUS ( '-' or '+' ) and put the result in minus variable
 
-        // desnecessário no momento
-        void skip_closing();
-        int find_closing_first();   
-        int find_closing_last();
-        // 
-        bool end_input( void ) const;            /// Checks whether we reached the end of the expression string.
+        bool end_input( void ) const; /// Checks whether we reached the end of the expression string.
 
         //=== NTS methods.
-        bool expression();
-        /// desnecessário no momento
-        bool closing(); /// inserir um closing first e verificar se a um closing last no final
-        bool term();
-        bool integer();
-        bool natural_number();
-        bool digit_excl_zero();
-        bool digit();
+        bool expression(); /// evaluate current expression
+        bool term(); /// evaluate current term( OPERAND, OPERATOR, CLOSING, EXTRANEOUS TERM )
+        bool integer(); /// verifies if term is integer
+        bool natural_number(); /// verifies if term is natural number
+        bool digit_excl_zero(); /// verifies if term is natural number without zero
+        bool digit(); /// evaluate individuals digits
 };
 
 #endif
