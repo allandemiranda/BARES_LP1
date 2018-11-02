@@ -16,7 +16,7 @@ Para instalar e executar o programa siga as instruções:
 1. Abra o terminal do seu sistema operacional e digite ...
 2. `git clone https://github.com/allandemiranda/BARES_LP1.git`
 3. `cd BARES_LP1`
-4. `g++ -std=c++11 ./src/*.cpp -I ./include/*.h -o ./bin/bares.o`
+4. `g++ -Wall -std=c++11 src/*.cpp -I include -o ./bin/bares.o`
 5. `./bin/bares.o < "caminho do arquivo de entrada" > "saída com as respostas"`
 
 ## Arquivos de entrada e saída
