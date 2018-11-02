@@ -32,20 +32,24 @@ Caso existam mais de uma expressão no arquivo de entrada, os separe por linha. 
 
 
 entrada.txt -> `vim ./data/entrada.txt`</br>
-`0                          `</br>
-`Division by zero!          `</br>
-`8                          `</br>
-`230                        `</br>
-`Numeric overflow error!    `</br>
-`300                        `
+`240 / 12`</br>
+`12 / 240`</br>
+`120 / (2- 12 % 10 )`</br>
+` 2 * 4`</br>
+` 10 * 23`</br>
+` 10000 * 50 * 30 * 2 * 5`</br>
+` 30 * 2 * 5`</br>
+` 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9`</br>
 
 saida.txt -> `vim ./data/saida.txt`</br>
-`0                          `</br>
-`Division by zero!          `</br>
-`8                          `</br>
-`230                        `</br>
-`Numeric overflow error!    `</br>
-`300                        `</br>
+`20`</br>
+`0`</br>
+`Division by zero!`</br>
+`8`</br>
+`230`</br>
+`Numeric overflow error!`</br>
+`300`</br>
+`-43`</br>
 
 ## Operações suportadas
 
